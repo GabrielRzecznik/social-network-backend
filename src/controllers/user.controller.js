@@ -1,6 +1,22 @@
 import User from '../models/user.model.js';
+import { findUserByEmailOrUsername } from "../services/user.service.js";
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+//import jwt from 'jsonwebtoken';
+
+export const loginUser = async (req, res) => {
+  const { email, username, password } = req.query;
+  try {
+    const user = await findUserByEmailOrUsername(email, username);
+    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) return res.status(401).json({ message: "Contraseña incorrecta" });
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
 
 export async function registerUser(req, res) {
   try {
@@ -10,21 +26,5 @@ export async function registerUser(req, res) {
     res.status(201).json({ message: 'Usuario registrado', userId: newUser.id_user });
   } catch (error) {
     res.status(500).json({ error: 'Error al registrar usuario' });
-  }
-}
-
-export async function loginUser(req, res) {
-  try {
-    const { email, password } = req.body;
-    const user = await User.getUserByEmail(email);
-
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: 'Credenciales inválidas' });
-    }
-
-    const token = jwt.sign({ userId: user.id_user }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.json({ message: 'Login exitoso', token });
-  } catch (error) {
-    res.status(500).json({ error: 'Error en el login' });
   }
 }
