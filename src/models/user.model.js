@@ -21,6 +21,18 @@ class User {
     const result = await pool.query(query, [name, surname, email, username, img_user, id]);
     return result.rows[0];
   }
+
+  static async getUserById(id) {
+    const query = 'SELECT * FROM "user" WHERE id_user = $1';
+    const result = await pool.query(query, [id]);
+    return result.rows[0] || null;
+  }
+
+  static async findByEmailOrUsername(email, username) {
+    const query = 'SELECT * FROM "user" WHERE email = $1 OR username = $2';
+    const result = await pool.query(query, [email, username]);
+    return result.rows[0] || null;
+  }
 }
 
-export default User; // Exportando como default
+export default User;
