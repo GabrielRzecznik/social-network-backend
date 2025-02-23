@@ -6,6 +6,12 @@ export async function registerUser(req, res) {
   const { name, surname, email, username, password, img_user } = req.body;
 
   try {
+    // Verificar si el correo electrónico o el nombre de usuario ya existen
+    const existingUser = await findUserByEmailOrUsername(email, username);
+    if (existingUser) {
+      return res.status(400).json({ message: 'El correo electrónico o el nombre de usuario ya están en uso' });
+    }
+    
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Crear nuevo usuario
