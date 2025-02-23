@@ -1,6 +1,7 @@
 import pool from "../config/db.js";
 
 class User {
+  // Registrar usuario
   static async registerUser({ name, surname, email, username, password, img_user }) {
     const query = `
       INSERT INTO "user" (name, surname, email, username, password, img_user)
@@ -11,6 +12,7 @@ class User {
     return result.rows[0];
   }
 
+  // Editar usuario
   static async updateUser(id, { name, surname, email, username, img_user }) {
     const query = `
       UPDATE "user"
@@ -22,12 +24,14 @@ class User {
     return result.rows[0];
   }
 
+  // Obtener usuario por ID
   static async getUserById(id) {
     const query = 'SELECT * FROM "user" WHERE id_user = $1';
     const result = await pool.query(query, [id]);
     return result.rows[0] || null;
   }
 
+  // Buscar usuario por email o username
   static async findByEmailOrUsername(email, username) {
     const query = 'SELECT * FROM "user" WHERE email = $1 OR username = $2';
     const result = await pool.query(query, [email, username]);
