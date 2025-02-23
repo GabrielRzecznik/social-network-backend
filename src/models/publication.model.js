@@ -1,13 +1,13 @@
 import pool from "../config/db.js";
 
 class Publication {
-  static async createPublication({ user_id, content }) {
+  static async createPublication({ id_user, content_publication, img_publication }) {
     const query = `
-      INSERT INTO publication (user_id, content)
-      VALUES ($1, $2)
-      RETURNING id_publication, user_id, content, created_at;
+      INSERT INTO "publication" (id_user, content_publication, img_publication)
+      VALUES ($1, $2, $3)
+      RETURNING id_publication, id_user, content_publication, img_publication;
     `;
-    const result = await pool.query(query, [user_id, content]);
+    const result = await pool.query(query, [id_user, content_publication, img_publication]);
     return result.rows[0];
   }
 }
