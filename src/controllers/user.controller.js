@@ -1,5 +1,5 @@
 import User from '../models/user.model.js';
-import { findUserByEmailOrUsername, isUsernameTaken, getUserById } from "../services/user.service.js";
+import { findUserByEmailOrUsername, getUserById } from "../services/user.service.js";
 import bcrypt from 'bcryptjs';
 
 export async function registerUser(req, res) {
@@ -69,8 +69,16 @@ export const updateUser = async (req, res) => {
     }
     
     // Verificar si el nuevo username ya está en uso
-    const iut = await isUsernameTaken(id, username);
-    if (iut) return res.status(404).json({ message: "Username no disponible" });
+    const usernameTaken = await findUserByEmailOrUsername(null, username);
+    if (usernameTaken && usernameTaken.id_user !== id) {
+      return res.status(404).json({ message: "Username no disponible" });
+    }
+
+    // Verificar si el nuevo email ya está en uso
+    const emailTaken = await findUserByEmailOrUsername(email, null);
+    if (emailTaken && emailTaken.id_user !== id) {
+      return res.status(404).json({ message: "Email no disponible" });
+    }
 
     // Actualizar los datos del usuario
     const updatedUser = await User.updateUser(id, {
