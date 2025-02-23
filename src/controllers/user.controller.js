@@ -1,6 +1,6 @@
-import User from '../models/user.model.js';
+import User from "../models/user.model.js";
 import { findUserByEmailOrUsername, getUserById } from "../services/user.service.js";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 
 export async function registerUser(req, res) {
   const { name, surname, email, username, password, img_user } = req.body;
