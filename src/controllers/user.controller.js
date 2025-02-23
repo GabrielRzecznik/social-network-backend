@@ -6,15 +6,13 @@ export async function registerUser(req, res) {
   const { name, surname, email, username, password, img_user } = req.body;
 
   try {
-    // Verificar si el correo electrónico o el nombre de usuario ya existen
     const existingUser = await findUserByEmailOrUsername(email, username);
     if (existingUser) {
       return res.status(400).json({ message: 'El correo electrónico o el nombre de usuario ya están en uso' });
     }
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear nuevo usuario
     const newUser = await User.registerUser({
       name, surname, email, username, password: hashedPassword, img_user
     });
@@ -28,13 +26,11 @@ export async function registerUser(req, res) {
 
 export const loginUser = async (req, res) => {
   const { email, username, password } = req.body;
-  
+
   try {
-    // Buscar al usuario por email o username
     const user = await findUserByEmailOrUsername(email, username);
     if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
-    
-    // Verificar si la contraseña es correcta
+
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) return res.status(401).json({ message: "Contraseña incorrecta" });
 
@@ -50,14 +46,11 @@ export const updateUser = async (req, res) => {
   const { name, surname, email, username, password, img_user } = req.body;
 
   try {
-    //Obtener los datos actuales del usuario
     const userData = await getUserById(id);
     
-    // Validar identidad del usuario 
     const validPassword = await bcrypt.compare(password, userData.password);
     if (!validPassword) return res.status(401).json({ message: "Contraseña incorrecta" });
 
-    // Verificar si hay cambios entre los datos actuales y los nuevos datos enviados
     if (
       userData.name === name &&
       userData.surname === surname &&
@@ -67,20 +60,17 @@ export const updateUser = async (req, res) => {
     ) {
       return res.status(200).json({ message: "No se realizaron cambios" });
     }
-    
-    // Verificar si el nuevo username ya está en uso
+
     const usernameTaken = await findUserByEmailOrUsername(null, username);
     if (usernameTaken && usernameTaken.id_user !== id) {
       return res.status(404).json({ message: "Username no disponible" });
     }
 
-    // Verificar si el nuevo email ya está en uso
     const emailTaken = await findUserByEmailOrUsername(email, null);
     if (emailTaken && emailTaken.id_user !== id) {
       return res.status(404).json({ message: "Email no disponible" });
     }
 
-    // Actualizar los datos del usuario
     const updatedUser = await User.updateUser(id, {
       name, surname, email, username, img_user
     });
@@ -91,7 +81,6 @@ export const updateUser = async (req, res) => {
     });
   } catch (error) {
     console.error("Error:", error);
-    // Si el error es por un username duplicado
     if (error.message === 'El nombre de usuario ya está en uso') {
       return res.status(400).json({ message: error.message });
     }
