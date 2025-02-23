@@ -1,5 +1,5 @@
 import User from '../models/user.model.js';
-import { findUserByEmailOrUsername, isUsernameTaken } from "../services/user.service.js";
+import { findUserByEmailOrUsername, isUsernameTaken, getUserById } from "../services/user.service.js";
 import bcrypt from 'bcryptjs';
 
 export async function registerUser(req, res) {
@@ -51,7 +51,7 @@ export const updateUser = async (req, res) => {
 
   try {
     //Obtener los datos actuales del usuario
-    const userData = await User.getUserById(id);
+    const userData = await getUserById(id);
     
     // Validar identidad del usuario 
     const validPassword = await bcrypt.compare(password, userData.password);
