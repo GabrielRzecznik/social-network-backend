@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import { findUserByEmailOrUsername, getUserById } from "../services/user.service.js";
 import bcrypt from "bcryptjs";
 
+// Registro de usuario
 export async function registerUser(req, res) {
   const { name, surname, email, username, password, img_user } = req.body;
 
@@ -24,6 +25,7 @@ export async function registerUser(req, res) {
   }
 }
 
+// Inicio de sesión usuario
 export const loginUser = async (req, res) => {
   const { email, username, password } = req.body;
 
@@ -40,6 +42,7 @@ export const loginUser = async (req, res) => {
   }
 };
 
+// Editar usuario
 export const updateUser = async (req, res) => {
   let { id } = req.params;
   id = parseInt(id, 10);
