@@ -20,7 +20,6 @@ export async function registerUser(req, res) {
 
     res.status(201).json({ message: 'Usuario registrado', id_user: newUser.id_user });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Error al registrar usuario' });
   }
 }
@@ -83,10 +82,34 @@ export const updateUser = async (req, res) => {
       user: updatedUser
     });
   } catch (error) {
-    console.error("Error:", error);
-    if (error.message === 'El nombre de usuario ya está en uso') {
-      return res.status(400).json({ message: error.message });
-    }
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
+// Editar password
+export const updatePassword = async (req, res) => {
+  
+  const { id_user, password, new_password } = req.body;
+
+  try {
+    const userData = await getUserById(id_user);
+    
+    const validPassword = await bcrypt.compare(password, userData.password);
+    if (!validPassword) return res.status(401).json({ message: "Contraseña incorrecta" });
+
+    if (password === new_password) return res.status(401).json({ message: "No se realizaron cambios" });
+    
+    const hashedPassword = await bcrypt.hash(new_password, 10);
+    
+    const updatedPassword = await User.updatePassword(
+      id_user, hashedPassword
+    );
+
+    res.json({
+      message: "Password actualizada exitosamente",
+      user: updatedPassword
+    });
+  } catch (error) {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };

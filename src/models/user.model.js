@@ -24,6 +24,17 @@ class User {
     return result.rows[0];
   }
 
+  // Editar password
+  static async updatePassword(id_user, new_password) {
+    const query = `
+      UPDATE "user"
+      SET password = $2
+      WHERE id_user = $1
+    `;
+    const result = await pool.query(query, [id_user, new_password]);
+    return result.rows[0];
+  }
+
   // Obtener usuario por ID
   static async getUserById(id) {
     const query = 'SELECT * FROM "user" WHERE id_user = $1';
