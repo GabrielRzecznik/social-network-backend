@@ -43,3 +43,22 @@ export const updatePublication = async (req, res) => {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
+
+// Editar status publication
+export const updateStatusPublication = async (req, res) => {
+  
+  const { id_publication, status_publication } = req.body;
+  
+  try {
+    const updatedStatusPublication = await Publication.updateStatusPublication({
+      id_publication, status_publication
+    });
+    
+    res.json({
+      message: "Status de publicación actualizado exitosamente",
+      user: updatedStatusPublication
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};

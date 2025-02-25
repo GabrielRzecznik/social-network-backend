@@ -23,6 +23,19 @@ class Publication {
     const result = await pool.query(query, [content_publication, img_publication, id_publication]);
     return result.rows[0];
   }
+
+  // Editar status de publicación
+  static async updateStatusPublication({ id_publication, status_publication }) {
+    console.log(id_publication);
+    const query = `
+      UPDATE "publication"
+      SET status_publication = $2
+      WHERE id_publication = $1
+      RETURNING id_publication, content_publication, img_publication, status_publication;
+    `;
+    const result = await pool.query(query, [id_publication, status_publication]);
+    return result.rows[0];
+  }
 }
 
 export default Publication;
