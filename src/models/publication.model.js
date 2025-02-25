@@ -26,7 +26,7 @@ class Publication {
 
   // Editar status de publicación
   static async updateStatusPublication({ id_publication, status_publication }) {
-    console.log(id_publication);
+    
     const query = `
       UPDATE "publication"
       SET status_publication = $2
