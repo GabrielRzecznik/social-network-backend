@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.routes.js";
 import publicationRoutes from "./routes/publication.routes.js";
+import followRoutes from "./routes/follow.routes.js";
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/user", userRoutes);
 app.use("/api/publication", publicationRoutes);
+app.use("/api/follow", followRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
