@@ -42,6 +42,22 @@ class Follow {
     const result = await pool.query(query, [id_user]);
     return result.rows[0];
   }
+
+  // Obtener seguidores
+  static async getFollowers(id_user) {
+    const query = `
+      SELECT
+        u.id_user,
+        u.username,
+        u.email,
+        u.img_user
+      FROM "follow" f
+      JOIN "user" u ON f.follower = u.id_user
+      WHERE f.following = $1;
+    `;
+    const result = await pool.query(query, [id_user]);
+    return result.rows;
+  }
 }
 
 export default Follow;

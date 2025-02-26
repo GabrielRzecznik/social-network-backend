@@ -64,3 +64,19 @@ export const getFollowsCount = async (req, res) => {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
+
+// Obtener seguidores
+export const getFollowers = async (req, res) => {
+  const { id_user } = req.body;  
+  
+  try {
+    const followers = await Follow.getFollowers( id_user );
+
+    res.json({
+      message: "Seguidores obtenidos exitosamente",
+      user: followers
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
