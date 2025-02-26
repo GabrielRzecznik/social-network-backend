@@ -31,7 +31,10 @@ export const removeFollow = async (req, res) => {
   const followIdResult = await findFollowId(id_user_1, id_user_2);
   if (!followIdResult) {
     return res.status(500).json({ message: 'No se encontro el follow' });
+  }else if (followIdResult && followIdResult.status_follow === false) {
+    return res.status(500).json({ message: 'El usuario no sigue al otro usuario' });
   }
+  
   const id_follow = followIdResult.id_follow
   
   try {
