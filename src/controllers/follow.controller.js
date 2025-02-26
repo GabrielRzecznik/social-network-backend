@@ -6,11 +6,13 @@ export const addFollow = async (req, res) => {
   const { id_user_1, id_user_2 } = req.body;
 
   const followIdResult = await findFollowId(id_user_1, id_user_2);
-  if (followIdResult) {
+  if (followIdResult && followIdResult.status_follow === false) {
     const id_follow = followIdResult.id_follow;
     
     const result = await toggleFollow(id_follow, true);
     return res.status(200).json({ message: 'Follow reactivado exitosamente', follow: result });
+  }else if (followIdResult && followIdResult.status_follow === true) {
+    return res.status(500).json({ message: 'El usuario ya sigues al otro usuario' });
   }
 
   try {
