@@ -80,3 +80,19 @@ export const getFollowers = async (req, res) => {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
+
+// Obtener seguidos
+export const getFollowings = async (req, res) => {
+  const { id_user } = req.body;  
+  
+  try {
+    const followings = await Follow.getFollowings( id_user );
+
+    res.json({
+      message: "Seguidos obtenidos exitosamente",
+      user: followings
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};

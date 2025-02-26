@@ -53,7 +53,23 @@ class Follow {
         u.img_user
       FROM "follow" f
       JOIN "user" u ON f.follower = u.id_user
-      WHERE f.following = $1;
+      WHERE f.following = $1 AND f.status_follow = true;
+    `;
+    const result = await pool.query(query, [id_user]);
+    return result.rows;
+  }
+
+  // Obtener seguidos
+  static async getFollowings(id_user) {
+    const query = `
+      SELECT
+        u.id_user,
+        u.username,
+        u.email,
+        u.img_user
+      FROM "follow" f
+      JOIN "user" u ON f.following = u.id_user
+      WHERE f.follower = $1 AND f.status_follow = true;
     `;
     const result = await pool.query(query, [id_user]);
     return result.rows;
