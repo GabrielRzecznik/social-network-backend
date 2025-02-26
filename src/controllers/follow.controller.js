@@ -48,3 +48,19 @@ export const removeFollow = async (req, res) => {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
+
+// Obtener cantidad de follows
+export const getFollowsCount = async (req, res) => {
+  const { id_user } = req.body;  
+  
+  try {
+    const followStats = await Follow.getFollowsCount( id_user );
+
+    res.json({
+      message: "Follows obtenidos exitosamente",
+      user: followStats
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};

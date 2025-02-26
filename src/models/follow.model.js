@@ -30,6 +30,18 @@ class Follow {
     const result = await pool.query(query, [id_follow, value]);
     return result.rows[0];
   }
+
+  // Obtener cantidad de follows
+  static async getFollowsCount(id_user) {
+    const query = `
+      SELECT
+        COUNT(CASE WHEN follower = $1 THEN 1 END) AS followers,
+        COUNT(CASE WHEN following = $1 THEN 1 END) AS followings
+      FROM "follow";
+    `;
+    const result = await pool.query(query, [id_user]);
+    return result.rows[0];
+  }
 }
 
 export default Follow;
