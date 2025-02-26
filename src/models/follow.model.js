@@ -14,7 +14,7 @@ class Follow {
 
   // Obtener ID del follow
   static async findFollowId({ id_user_1, id_user_2 }) {
-    const query = 'SELECT * FROM "follow" WHERE (sender_follow = $1 OR sender_follow = $2) AND (receiver_follow = $1 OR receiver_follow = $2);';
+    const query = 'SELECT * FROM "follow" WHERE sender_follow = $1 AND receiver_follow = $2;';
     const result = await pool.query(query, [id_user_1, id_user_2]);
     return result.rows[0] || null;
   }
