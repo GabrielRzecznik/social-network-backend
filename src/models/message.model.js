@@ -11,6 +11,18 @@ class Message {
     const result = await pool.query(query, [sender_message, receiver_message, content_message, timestamp_message, status_message]);
     return result.rows[0];
   }
+
+  // Editar mensaje
+  static async updateMessage({ id_message, content_message }) {
+    const query = `
+      UPDATE "message"
+      SET content_message = $1 AND status_message = 3
+      WHERE id_message = $2
+      RETURNING id_message, sender_message, receiver_message, content_message, timestamp_message, status_message;
+    `;
+    const result = await pool.query(query, [content_message, id_message]);
+    return result.rows[0];
+  }
 }
 
 export default Message;

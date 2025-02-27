@@ -14,3 +14,16 @@ export const sendMessage = async (req, res) => {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
+
+// Editar mensaje
+export const updateMessage = async (req, res) => {
+  const { id_message, content_message } = req.body;
+
+  try {
+    const updatedMessage = await Message.updateMessage({ id_message, content_message });
+    
+    res.status(200).json({ message: "Mensaje actualizado exitosamente", message: updatedMessage });
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
