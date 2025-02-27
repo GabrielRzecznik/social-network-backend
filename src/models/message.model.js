@@ -20,7 +20,7 @@ class Message {
     WHERE id_message = $2
     RETURNING id_message, sender_message, receiver_message, content_message, timestamp_message, status_message;
     `;
-    console.log("Hola");
+
     const result = await pool.query(query, [content_message, id_message]);
     return result.rows[0];
   }
