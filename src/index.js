@@ -4,6 +4,7 @@ import userRoutes from "./routes/user.routes.js";
 import publicationRoutes from "./routes/publication.routes.js";
 import followRoutes from "./routes/follow.routes.js";
 import messageRoutes from "./routes/message.routes.js";
+import chatRoutes from "./routes/chat.routes.js";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/publication", publicationRoutes);
 app.use("/api/follow", followRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/chat", chatRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
