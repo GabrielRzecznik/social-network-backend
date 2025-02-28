@@ -24,6 +24,18 @@ class Message {
     const result = await pool.query(query, [content_message, id_message]);
     return result.rows[0];
   }
+
+  // Obtener mensajes de un chat
+  static async getChatMessages({ id_chat }) {
+    const query = `
+      SELECT id_message, sender_message, receiver_message, content_message, timestamp_message, status_message
+      FROM "message"
+      WHERE id_chat = $1 AND status_message <> 0
+      ORDER BY timestamp_message ASC;
+    `;
+    const result = await pool.query(query, [id_chat]);
+    return result.rows;
+  }
 }
 
 export default Message;
