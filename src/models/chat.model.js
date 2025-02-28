@@ -1,6 +1,28 @@
 import pool from "../config/db.js";
 
 class Chat {
+  // Buscar un chat entre dos usuarios
+  static async findChatByUsers(sender_message, receiver_message) {
+    const query = `
+      SELECT * FROM "chat"
+      WHERE (id_user1 = $1 AND id_user2 = $2) OR (id_user1 = $2 AND id_user2 = $1)
+      LIMIT 1;
+    `;
+    const result = await pool.query(query, [sender_message, receiver_message]);
+    return result.rows[0];
+  }
+
+  // Crear un nuevo chat entre dos usuarios
+  static async createChat(sender_message, receiver_message) {
+    const query = `
+      INSERT INTO "chat" (id_user1, id_user2) 
+      VALUES ($1, $2) 
+      RETURNING id_chat;
+    `;
+    const result = await pool.query(query, [sender_message, receiver_message]);
+    return result.rows[0];
+  }
+  
   // Obtener chats de un usuario
   static async getUserChats({ id_user }) {
     const query = `

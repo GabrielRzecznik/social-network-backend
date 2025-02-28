@@ -1,4 +1,5 @@
 import Message from "../models/message.model.js";
+import Chat from "../models/chat.model.js";
 import { getCurrentTimestamp } from '../utils/timesstampUtils.js';
 
 // Enviar mesanje
@@ -8,7 +9,20 @@ export const sendMessage = async (req, res) => {
   const status_message = 1;
 
   try {
-    const newMessage = await Message.sendMessage({ sender_message, receiver_message, content_message, timestamp_message, status_message });
+    // Verificar si el chat ya existe entre los dos usuarios
+    let chat = await Chat.findChatByUsers(sender_message, receiver_message);
+    if (!chat) {
+      chat = await Chat.createChat(sender_message, receiver_message);
+    }
+
+    const newMessage = await Message.sendMessage({ 
+      sender_message, 
+      receiver_message, 
+      content_message, 
+      timestamp_message, 
+      status_message,
+      id_chat: chat.id_chat
+    });
     res.status(201).json({ message: "Mensaje enviado exitosamente", message: newMessage });
   } catch (error) {
     res.status(500).json({ message: "Error interno del servidor" });
