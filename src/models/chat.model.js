@@ -33,6 +33,18 @@ class Chat {
     const result = await pool.query(query, [id_user]);
     return result.rows[0];
   }
+
+  // Actualizar status de un chat
+  static async updateChat({ id_chat, status_chat }) {
+    const query = `
+      UPDATE "chat"
+      SET status_chat = $2
+      WHERE id_chat = $1
+      RETURNING *;
+    `;
+    const result = await pool.query(query, [id_chat, status_chat]);
+    return result.rows[0];
+  }
 }
 
 export default Chat;

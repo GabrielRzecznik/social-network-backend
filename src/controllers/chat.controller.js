@@ -24,3 +24,15 @@ export const getChat = async (req, res) => {
   }
 };
 
+// Actualizar status de un chat
+export const updateChat = async (req, res) => {
+  const { id_chat, status_chat } = req.body;
+
+  try {
+    const chat = await Chat.updateChat({ id_chat, status_chat });
+    res.status(200).json({ chat });
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
