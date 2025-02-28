@@ -1,5 +1,4 @@
 import User from "../models/user.model.js";
-import { findUserByEmailOrUsername, getUserById } from "../services/user.service.js";
 import bcrypt from "bcryptjs";
 
 // Registro de usuario
@@ -7,7 +6,7 @@ export async function registerUser(req, res) {
   const { name, surname, email, username, password, img_user } = req.body;
 
   try {
-    const existingUser = await findUserByEmailOrUsername(email, username);
+    const existingUser = await User.findByEmailOrUsername(email, username);
     if (existingUser) {
       return res.status(400).json({ message: 'El correo electrónico o el nombre de usuario ya están en uso' });
     }
@@ -29,7 +28,7 @@ export const loginUser = async (req, res) => {
   const { email, username, password } = req.body;
 
   try {
-    const user = await findUserByEmailOrUsername(email, username);
+    const user = await User.findByEmailOrUsername(email, username);
     if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
 
     const validPassword = await bcrypt.compare(password, user.password);
@@ -48,7 +47,7 @@ export const updateUser = async (req, res) => {
   const { name, surname, email, username, password, img_user } = req.body;
 
   try {
-    const userData = await getUserById(id);
+    const userData = await User.getUserById(id);
     
     const validPassword = await bcrypt.compare(password, userData.password);
     if (!validPassword) return res.status(401).json({ message: "Contraseña incorrecta" });
@@ -63,12 +62,12 @@ export const updateUser = async (req, res) => {
       return res.status(200).json({ message: "No se realizaron cambios" });
     }
 
-    const usernameTaken = await findUserByEmailOrUsername(null, username);
+    const usernameTaken = await User.findByEmailOrUsername(null, username);
     if (usernameTaken && usernameTaken.id_user !== id) {
       return res.status(404).json({ message: "Username no disponible" });
     }
 
-    const emailTaken = await findUserByEmailOrUsername(email, null);
+    const emailTaken = await User.findByEmailOrUsername(email, null);
     if (emailTaken && emailTaken.id_user !== id) {
       return res.status(404).json({ message: "Email no disponible" });
     }
@@ -92,7 +91,7 @@ export const updatePassword = async (req, res) => {
   const { id_user, password, new_password } = req.body;
 
   try {
-    const userData = await getUserById(id_user);
+    const userData = await User.getUserById(id_user);
     
     const validPassword = await bcrypt.compare(password, userData.password);
     if (!validPassword) return res.status(401).json({ message: "Contraseña incorrecta" });
