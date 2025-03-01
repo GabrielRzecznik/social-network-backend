@@ -7,6 +7,6 @@ const router = Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.put("/:id", protectRoute, updateUser);
-router.patch("/password", updatePassword);
+router.patch("/password", protectRoute,updatePassword);
 
 export default router;
