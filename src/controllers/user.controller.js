@@ -44,7 +44,7 @@ export const loginUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   let { id } = req.params;
   id = parseInt(id, 10);
-  const { name, surname, email, username, password, img_user } = req.body;
+  const { name, surname, email, username, birthdate, password, img_user } = req.body;
 
   try {
     const userData = await User.getUserById(id);
@@ -57,6 +57,7 @@ export const updateUser = async (req, res) => {
       userData.surname === surname &&
       userData.email === email &&
       userData.username === username &&
+      userData.birthdate === birthdate &&
       userData.img_user === img_user
     ) {
       return res.status(200).json({ message: "No se realizaron cambios" });
@@ -73,7 +74,7 @@ export const updateUser = async (req, res) => {
     }
 
     const updatedUser = await User.updateUser(id, {
-      name, surname, email, username, img_user
+      name, surname, email, username, birthdate, img_user
     });
 
     res.json({
