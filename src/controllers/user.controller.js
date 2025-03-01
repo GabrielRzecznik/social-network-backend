@@ -1,5 +1,6 @@
-import User from "../models/user.model.js";
+import { generateToken } from "../services/auth.service.js";
 import bcrypt from "bcryptjs";
+import User from "../models/user.model.js";
 
 // Registro de usuario
 export async function registerUser(req, res) {
@@ -34,7 +35,22 @@ export const loginUser = async (req, res) => {
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) return res.status(401).json({ message: "Contraseña incorrecta" });
 
-    res.json(user);
+    // Generar el token
+    const token = generateToken(user);
+    
+    res.json({
+      message: "Inicio de sesión exitoso",
+      token,
+      user: {
+        id_user: user.id_user,
+        name: user.name,
+        surname: user.surname,
+        email: user.email,
+        username: user.username,
+        birthdate: user.birthdate,
+        img_user: user.img_user,
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: "Error interno del servidor" });
   }
