@@ -1,4 +1,4 @@
-import { generateToken } from "../services/auth.service.js";
+import { generateAccessToken, generateRefreshToken } from "../services/auth.service.js";
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 
@@ -35,12 +35,11 @@ export const loginUser = async (req, res) => {
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) return res.status(401).json({ message: "Contraseña incorrecta" });
 
-    // Generar el token
-    const token = generateToken(user);
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
     
     res.json({
-      message: "Inicio de sesión exitoso",
-      token,
+      message: "Inicio de sesión exitoso", accessToken, refreshToken,
       user: {
         id_user: user.id_user,
         name: user.name,
@@ -58,13 +57,15 @@ export const loginUser = async (req, res) => {
 
 // Editar usuario
 export const updateUser = async (req, res) => {
-  let { id } = req.params;
-  id = parseInt(id, 10);
+  const id = parseInt(req.params.id, 10);
+  if (isNaN(id)) return res.status(400).json({ message: "ID inválido" });
+
   const { name, surname, email, username, birthdate, password, img_user } = req.body;
 
   try {
     const userData = await User.getUserById(id);
-    
+    if (!userData) return res.status(404).json({ message: "Usuario no encontrado" });
+
     const validPassword = await bcrypt.compare(password, userData.password);
     if (!validPassword) return res.status(401).json({ message: "Contraseña incorrecta" });
 
@@ -81,22 +82,19 @@ export const updateUser = async (req, res) => {
 
     const usernameTaken = await User.findByEmailOrUsername(null, username);
     if (usernameTaken && usernameTaken.id_user !== id) {
-      return res.status(404).json({ message: "Username no disponible" });
+      return res.status(400).json({ message: "Username no disponible" });
     }
 
     const emailTaken = await User.findByEmailOrUsername(email, null);
     if (emailTaken && emailTaken.id_user !== id) {
-      return res.status(404).json({ message: "Email no disponible" });
+      return res.status(400).json({ message: "Email no disponible" });
     }
 
     const updatedUser = await User.updateUser(id, {
       name, surname, email, username, birthdate, img_user
     });
 
-    res.json({
-      message: "Usuario actualizado exitosamente",
-      user: updatedUser
-    });
+    res.json({ message: "Usuario actualizado exitosamente", user: updatedUser });
   } catch (error) {
     res.status(500).json({ message: "Error interno del servidor" });
   }
@@ -104,27 +102,22 @@ export const updateUser = async (req, res) => {
 
 // Editar password
 export const updatePassword = async (req, res) => {
-  
-  const { id_user, password, new_password } = req.body;
+  const id_user = req.user.id_user; // Usamos el ID del token
+  const { password, new_password } = req.body;
 
   try {
     const userData = await User.getUserById(id_user);
-    
+    if (!userData) return res.status(404).json({ message: "Usuario no encontrado" });
+
     const validPassword = await bcrypt.compare(password, userData.password);
     if (!validPassword) return res.status(401).json({ message: "Contraseña incorrecta" });
 
-    if (password === new_password) return res.status(401).json({ message: "No se realizaron cambios" });
-    
-    const hashedPassword = await bcrypt.hash(new_password, 10);
-    
-    const updatedPassword = await User.updatePassword(
-      id_user, hashedPassword
-    );
+    if (password === new_password) return res.status(400).json({ message: "La nueva contraseña no puede ser igual a la anterior" });
 
-    res.json({
-      message: "Password actualizada exitosamente",
-      user: updatedPassword
-    });
+    const hashedPassword = await bcrypt.hash(new_password, 10);
+    await User.updatePassword(id_user, hashedPassword);
+
+    res.json({ message: "Password actualizada exitosamente" });
   } catch (error) {
     res.status(500).json({ message: "Error interno del servidor" });
   }
