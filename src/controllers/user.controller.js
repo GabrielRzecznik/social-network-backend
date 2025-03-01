@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 // Registro de usuario
 export async function registerUser(req, res) {
-  const { name, surname, email, username, password, img_user } = req.body;
+  const { name, surname, email, username, birthdate, password, img_user } = req.body;
 
   try {
     const existingUser = await User.findByEmailOrUsername(email, username);
@@ -14,7 +14,7 @@ export async function registerUser(req, res) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.registerUser({
-      name, surname, email, username, password: hashedPassword, img_user
+      name, surname, email, username, birthdate, password: hashedPassword, img_user
     });
 
     res.status(201).json({ message: 'Usuario registrado', id_user: newUser.id_user });

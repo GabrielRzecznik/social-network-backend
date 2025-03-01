@@ -2,13 +2,13 @@ import pool from "../config/db.js";
 
 class User {
   // Registrar usuario
-  static async registerUser({ name, surname, email, username, password, img_user }) {
+  static async registerUser({ name, surname, email, username, birthdate, password, img_user }) {
     const query = `
-      INSERT INTO "user" (name, surname, email, username, password, img_user)
-      VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id_user, name, surname, email, username, img_user;
+      INSERT INTO "user" (name, surname, email, username, birthdate, password, img_user)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING id_user, name, surname, email, username, birthdate, img_user;
     `;
-    const result = await pool.query(query, [name, surname, email, username, password, img_user]);
+    const result = await pool.query(query, [name, surname, email, username, birthdate, password, img_user]);
     return result.rows[0];
   }
 
