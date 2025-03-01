@@ -26,7 +26,6 @@ class Publication {
 
   // Editar status de publicación
   static async updateStatusPublication({ id_publication, status_publication }) {
-    
     const query = `
       UPDATE "publication"
       SET status_publication = $2
@@ -35,6 +34,13 @@ class Publication {
     `;
     const result = await pool.query(query, [id_publication, status_publication]);
     return result.rows[0];
+  }
+
+  // Obtener publicación por su ID
+  static async getPublicationById(id_publication) {
+    const query = `SELECT * FROM "publication" WHERE id_publication = $1`;
+    const result = await pool.query(query, [id_publication]);
+    return result.rows[0] || null;
   }
 }
 

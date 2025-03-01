@@ -1,5 +1,5 @@
 import Publication from "../models/publication.model.js";
-import { createPublication, getPublicationById } from "../services/publication.service.js";
+import { createPublication } from "../services/publication.service.js";
 
 // Crear publicación
 export const createNewPublication  = async (req, res) => {
@@ -21,7 +21,7 @@ export const updatePublication = async (req, res) => {
   const { content_publication, img_publication } = req.body;
 
   try {
-    const publicationData = await getPublicationById(id_publication);
+    const publicationData = await Publication.getPublicationById(id_publication);
 
     if (
       publicationData.content_publication === content_publication &&
