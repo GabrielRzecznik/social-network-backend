@@ -1,6 +1,29 @@
-import { generateAccessToken, generateRefreshToken } from "../services/auth.service.js";
+import { verifyRefreshToken, generateAccessToken, generateRefreshToken } from "../services/auth.service.js";
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
+
+export const refreshAccessToken = async (req, res) => {
+  const { refreshToken } = req.body;
+  
+  if (!refreshToken) {
+    return res.status(403).json({ message: "No hay refresh token" });
+  }
+
+  try {
+    const decoded = verifyRefreshToken(refreshToken);
+    const user = await User.getUserById(decoded.id_user);
+    
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    const newAccessToken = generateAccessToken(user);
+    
+    res.json({ accessToken: newAccessToken });
+  } catch (error) {
+    res.status(401).json({ message: "Refresh token no válido" });
+  }
+};
 
 // Registro de usuario
 export async function registerUser(req, res) {

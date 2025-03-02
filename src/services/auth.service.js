@@ -8,7 +8,7 @@ const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "your-refresh-secret-ke
 
 // Generar un Access Token
 export const generateAccessToken = (user) => {
-  return jwt.sign({ id_user: user.id_user, username: user.username }, SECRET, { expiresIn: "1h" });
+  return jwt.sign({ id_user: user.id_user, username: user.username }, SECRET, { expiresIn: "1m" });
 };
 
 // Generar un Refresh Token
