@@ -1,13 +1,12 @@
-import { Router } from "express";
-import { protectRoute } from "../middlewares/auth.middleware.js";
-import { registerUser, loginUser, updateUser, updatePassword, refreshAccessToken } from "../controllers/user.controller.js";
+import { Router } from 'express';
+import { protectRoute } from '../middlewares/auth.middleware.js';
+import { registerUser, loginUser, updateUser, updatePassword } from '../controllers/user.controller.js';
 
 const router = Router();
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
-router.put("/:id", protectRoute, updateUser);
-router.patch("/password", protectRoute,updatePassword);
-router.post("/refresh", refreshAccessToken);
+router.post('/register', registerUser);
+router.post('/login', loginUser);
+router.put('/:id', protectRoute, updateUser);
+router.patch('/password', protectRoute, updatePassword);
 
 export default router;
