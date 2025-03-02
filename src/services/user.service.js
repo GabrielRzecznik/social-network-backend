@@ -24,14 +24,34 @@ class UserService {
     return user;
   }
 
-  async updateUser(id, userData) {
+  async updateUser(id_user, userData) {
     const { email, username } = userData;
-    const existingUser = await UserRepository.findByEmailOrUsername(email, username);
-    if (existingUser && existingUser.id_user !== id) {
-      throw new Error('El correo electrónico o el nombre de usuario ya están en uso');
+    
+    // Obtener el usuario actual
+    const currentUser = await UserRepository.getUserById(id_user);
+    if (!currentUser) {
+        throw new Error('Usuario no encontrado');
     }
 
-    return UserRepository.updateUser(id, userData);
+    // Verificar si hay cambios
+    const isSameData = Object.keys(userData).every(key => currentUser[key] === userData[key]);
+    if (isSameData) {
+        throw new Error('No hay cambios en los datos del usuario');
+    }
+
+    // Verificar si el username ya están en uso
+    const usernameTaken = await UserRepository.findByEmailOrUsername(null, username);
+    if (usernameTaken && usernameTaken.id_user !== id_user) {
+      throw new Error('Username no disponible');
+    }
+
+    // Verifica si el email ya está en uso
+    const emailTaken = await UserRepository.findByEmailOrUsername(email, null);
+    if (emailTaken && emailTaken.id_user !== id_user) {
+      throw new Error('Email no disponible');
+    }
+    
+    return UserRepository.updateUser(id_user, userData);
   }
 
   async updatePassword(id_user, current_password, new_password) {

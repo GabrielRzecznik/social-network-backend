@@ -23,11 +23,11 @@ export const loginUser = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  if (isNaN(id)) return res.status(400).json({ message: 'ID inválido' });
+  const id_user = req.user.id_user;
+  if (isNaN(id_user)) return res.status(400).json({ message: 'ID inválido' });
 
   try {
-    const updatedUser = await UserService.updateUser(id, req.body);
+    const updatedUser = await UserService.updateUser(id_user, req.body);
     res.json({ message: 'Usuario actualizado', user: updatedUser });
   } catch (error) {
     res.status(400).json({ message: error.message });
