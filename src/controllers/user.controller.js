@@ -1,10 +1,10 @@
-import UserService from '../services/user.service.js';
+import userService from '../services/user.service.js';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../services/auth.service.js';
 import userRepository from '../repositories/user.repository.js';
 
 export const registerUser = async (req, res) => {
   try {
-    const newUser = await UserService.registerUser(req.body);
+    const newUser = await userService.registerUser(req.body);
     res.status(201).json({ message: 'Usuario registrado', user: newUser });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -14,7 +14,7 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, username, password } = req.body;
   try {
-    const user = await UserService.loginUser(email, username, password);
+    const user = await userService.loginUser(email, username, password);
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
     res.json({ accessToken, refreshToken, user });
@@ -28,7 +28,7 @@ export const updateUser = async (req, res) => {
   if (isNaN(id_user)) return res.status(400).json({ message: 'ID inválido' });
 
   try {
-    const updatedUser = await UserService.updateUser(id_user, req.body);
+    const updatedUser = await userService.updateUser(id_user, req.body);
     res.json({ message: 'Usuario actualizado', user: updatedUser });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -40,7 +40,7 @@ export const updatePassword = async (req, res) => {
   const { current_password, new_password } = req.body;
 
   try {
-    await UserService.updatePassword(id_user, current_password, new_password);
+    await userService.updatePassword(id_user, current_password, new_password);
     res.json({ message: 'Contraseña actualizada correctamente' });
   } catch (error) {
     res.status(400).json({ message: error.message });

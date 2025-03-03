@@ -6,17 +6,11 @@ class UserService {
   async registerUser(userData) {
     const { email, username } = userData;
 
-    // Verificar si el username ya están en uso
     const usernameTaken = await UserRepository.findByEmailOrUsername(null, username);
-    if (usernameTaken) {
-      throw new Error('Username no disponible');
-    }
+    if (usernameTaken) throw new Error('Username no disponible');
 
-    // Verifica si el email ya está en uso
     const emailTaken = await UserRepository.findByEmailOrUsername(email, null);
-    if (emailTaken) {
-      throw new Error('Email no disponible');
-    }
+    if (emailTaken) throw new Error('Email no disponible');
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     return UserRepository.registerUser({ ...userData, password: hashedPassword });
@@ -33,33 +27,26 @@ class UserService {
   }
 
   async updateUser(id_user, userData) {
-    const { email, username } = userData;
-    
-    // Obtener el usuario actual
     const currentUser = await UserRepository.getUserById(id_user);
-    if (!currentUser) {
-        throw new Error('Usuario no encontrado');
+    if (!currentUser) throw new Error('Usuario no encontrado');
+
+    if (currentUser.birthdate instanceof Date) {
+      currentUser.birthdate = currentUser.birthdate.toISOString().split('T')[0]; 
     }
 
-    // Verificar si hay cambios
-    const isSameData = Object.keys(userData).every(key => currentUser[key] === userData[key]);
-    if (isSameData) {
-        throw new Error('No hay cambios en los datos del usuario');
-    }
+    const isSameData = Object.keys(userData).every(key => {
+      return String(currentUser[key]) === String(userData[key]);
+    });
 
-    // Verificar si el username ya están en uso
-    const usernameTaken = await UserRepository.findByEmailOrUsername(null, username);
-    if (usernameTaken && usernameTaken.id_user !== id_user) {
-      throw new Error('Username no disponible');
-    }
+    if (isSameData) throw new Error('No hay cambios en los datos del usuario');
 
-    // Verifica si el email ya está en uso
-    const emailTaken = await UserRepository.findByEmailOrUsername(email, null);
-    if (emailTaken && emailTaken.id_user !== id_user) {
-      throw new Error('Email no disponible');
-    }
-    
-    return UserRepository.updateUser(id_user, userData);
+    const usernameTaken = await UserRepository.findByEmailOrUsername(null, userData.username);
+    if (usernameTaken && usernameTaken.id_user !== id_user) throw new Error('Username no disponible');
+
+    const emailTaken = await UserRepository.findByEmailOrUsername(userData.email, null);
+    if (emailTaken && emailTaken.id_user !== id_user) throw new Error('Email no disponible');
+
+    return await UserRepository.updateUser(id_user, userData);
   }
 
   async updatePassword(id_user, current_password, new_password) {
@@ -73,7 +60,7 @@ class UserService {
     if (samePassword) throw new Error('La nueva contraseña no puede ser igual a la actual');
 
     const hashedPassword = await bcrypt.hash(new_password, 10);
-    return UserRepository.updatePassword(id_user, hashedPassword);
+    return await UserRepository.updatePassword(id_user, hashedPassword);
   }
 }
 
