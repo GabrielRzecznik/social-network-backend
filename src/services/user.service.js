@@ -5,9 +5,17 @@ import bcrypt from 'bcryptjs';
 class UserService {
   async registerUser(userData) {
     const { email, username } = userData;
-    const existingUser = await UserRepository.findByEmailOrUsername(email, username);
-    if (existingUser) {
-      throw new Error('El correo electrónico o el nombre de usuario ya están en uso');
+
+    // Verificar si el username ya están en uso
+    const usernameTaken = await UserRepository.findByEmailOrUsername(null, username);
+    if (usernameTaken) {
+      throw new Error('Username no disponible');
+    }
+
+    // Verifica si el email ya está en uso
+    const emailTaken = await UserRepository.findByEmailOrUsername(email, null);
+    if (emailTaken) {
+      throw new Error('Email no disponible');
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
