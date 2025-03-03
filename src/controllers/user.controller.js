@@ -1,5 +1,6 @@
 import UserService from '../services/user.service.js';
-import { generateAccessToken, generateRefreshToken } from '../services/auth.service.js';
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../services/auth.service.js';
+import userRepository from '../repositories/user.repository.js';
 
 export const registerUser = async (req, res) => {
   try {
@@ -43,5 +44,33 @@ export const updatePassword = async (req, res) => {
     res.json({ message: 'Contraseña actualizada correctamente' });
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+export const refreshAccessToken = async (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(403).json({ message: "No hay refresh token" });
+  }
+
+  try {
+    // Verificar el refresh token
+    const decoded = verifyRefreshToken(refreshToken);
+
+    // Obtener el usuario asociado al refresh token
+    const user = await userRepository.getUserById(decoded.id_user);
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Generar un nuevo access token
+    const newAccessToken = generateAccessToken(user);
+
+    // Devolver el nuevo access token
+    res.json({ accessToken: newAccessToken });
+  } catch (error) {
+    res.status(401).json({ message: error.message });
   }
 };
