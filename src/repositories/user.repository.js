@@ -6,7 +6,7 @@ class UserRepository {
     const query = `
       INSERT INTO "user" (name, surname, email, username, birthdate, password, img_user)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING *;
+      RETURNING id_user, name, surname, email, username, TO_CHAR(birthdate, 'YYYY-MM-DD') AS birthdate, img_user;
     `;
     const result = await pool.query(query, [name, surname, email, username, birthdate, password, img_user]);
     return new User(result.rows[0]);
