@@ -1,11 +1,11 @@
-import Publication from "../models/publication.model.js";
+import PublicationRepository from "../repositories/publication.repository.js";
 
 // Crear publicación
-export const createNewPublication  = async (req, res) => {
+export const createNewPublication = async (req, res) => {
   const { id_user, content_publication, img_publication } = req.body;
 
   try {
-    const newPublication = await Publication.createPublication({ id_user, content_publication, img_publication });
+    const newPublication = await PublicationRepository.createPublication({ id_user, content_publication, img_publication });
     res.status(201).json({ message: "Publicación creada", publication: newPublication });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -14,13 +14,11 @@ export const createNewPublication  = async (req, res) => {
 
 // Editar publicación
 export const updatePublication = async (req, res) => {
-  let { id_publication } = req.params;
-  id_publication = parseInt(id_publication, 10);
-
+  const { id_publication } = req.params;
   const { content_publication, img_publication } = req.body;
 
   try {
-    const publicationData = await Publication.getPublicationById(id_publication);
+    const publicationData = await PublicationRepository.getPublicationById(id_publication);
 
     if (
       publicationData.content_publication === content_publication &&
@@ -29,33 +27,31 @@ export const updatePublication = async (req, res) => {
       return res.status(200).json({ message: "No se realizaron cambios" });
     }
 
-    const updatedPublication = await Publication.updatePublication(id_publication, {
+    const updatedPublication = await PublicationRepository.updatePublication(id_publication, {
       content_publication, img_publication
     });
 
     res.json({
       message: "Publicación actualizada exitosamente",
-      user: updatedPublication
+      publication: updatedPublication
     });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 
-// Editar status publication
+// Editar status de publicación
 export const updateStatusPublication = async (req, res) => {
-  
   const { id_publication, status_publication } = req.body;
-  
+
   try {
-    const updatedStatusPublication = await Publication.updateStatusPublication({
+    const updatedStatusPublication = await PublicationRepository.updateStatusPublication({
       id_publication, status_publication
     });
-    
+
     res.json({
       message: "Status de publicación actualizado exitosamente",
-      user: updatedStatusPublication
+      publication: updatedStatusPublication
     });
   } catch (error) {
     res.status(500).json({ message: "Error interno del servidor" });
