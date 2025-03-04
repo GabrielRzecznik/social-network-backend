@@ -36,8 +36,22 @@ class UserRepository {
   }
 
   async findByEmailOrUsername(email, username) {
-    const query = `SELECT * FROM "user" WHERE email = $1 OR username = $2;`;
+    const query = `
+      SELECT
+        u.id_user,
+        u.name,
+        u.surname,
+        u.email,
+        u.username,
+        u.password,
+        TO_CHAR(u.birthdate, 'YYYY-MM-DD') AS birthdate,
+        u.img_user
+      FROM "user" u
+      WHERE email = $1 OR username = $2;
+    `;
+
     const result = await pool.query(query, [email, username]);
+
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
 }

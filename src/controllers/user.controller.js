@@ -1,11 +1,13 @@
 import userService from '../services/user.service.js';
 import { generateAccessToken, generateRefreshToken } from '../services/auth.service.js';
-import userRepository from '../repositories/user.repository.js';
 
 export const registerUser = async (req, res) => {
   try {
     const newUser = await userService.registerUser(req.body);
-    res.status(201).json({ message: 'Usuario registrado', user: newUser });
+    
+    const { password: _, ...userData } = newUser;
+    
+    res.status(201).json({ message: 'Usuario registrado', user: userData });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -15,9 +17,13 @@ export const loginUser = async (req, res) => {
   const { email, username, password } = req.body;
   try {
     const user = await userService.loginUser(email, username, password);
+    
+    const { password: _, ...userData } = user;
+    
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
-    res.json({ accessToken, refreshToken, user });
+    
+    res.json({ accessToken, refreshToken, user: userData });
   } catch (error) {
     res.status(401).json({ message: error.message });
   }
@@ -29,7 +35,10 @@ export const updateUser = async (req, res) => {
 
   try {
     const updatedUser = await userService.updateUser(id_user, req.body);
-    res.json({ message: 'Usuario actualizado', user: updatedUser });
+
+    const { password: _, ...userData } = updatedUser;
+
+    res.json({ message: 'Usuario actualizado', user: userData });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
