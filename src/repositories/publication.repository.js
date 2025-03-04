@@ -3,14 +3,14 @@ import Publication from "../models/publication.model.js";
 
 class PublicationRepository {
   // Crear publicación
-  static async createPublication({ id_user, content_publication, img_publication }) {
+  async createPublication({ id_user, content_publication, img_publication }) {
     const query = `
       INSERT INTO "publication" (id_user, content_publication, img_publication)
       VALUES ($1, $2, $3)
       RETURNING id_publication, id_user, content_publication, img_publication, status_publication;
     `;
     const result = await pool.query(query, [id_user, content_publication, img_publication]);
-    return Publication.fromDatabaseRow(result.rows[0]);
+    return new Publication(result.rows[0]);
   }
 
   // Obtener publicación por su ID
@@ -45,4 +45,4 @@ class PublicationRepository {
   }
 }
 
-export default PublicationRepository;
+export default new PublicationRepository();
