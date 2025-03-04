@@ -17,7 +17,7 @@ class PublicationRepository {
   static async getPublicationById(id_publication) {
     const query = `SELECT * FROM "publication" WHERE id_publication = $1`;
     const result = await pool.query(query, [id_publication]);
-    return result.rows[0] ? Publication.fromDatabaseRow(result.rows[0]) : null;
+    return result.rows[0] ? new Publication(result.rows[0]) : null;
   }
 
   // Editar publicación
@@ -29,7 +29,7 @@ class PublicationRepository {
       RETURNING id_publication, content_publication, img_publication, status_publication;
     `;
     const result = await pool.query(query, [content_publication, img_publication, id_publication]);
-    return Publication.fromDatabaseRow(result.rows[0]);
+    return new Publication(result.rows[0]);
   }
 
   // Editar status de publicación
@@ -41,7 +41,7 @@ class PublicationRepository {
       RETURNING id_publication, content_publication, img_publication, status_publication;
     `;
     const result = await pool.query(query, [id_publication, status_publication]);
-    return Publication.fromDatabaseRow(result.rows[0]);
+    return new Publication(result.rows[0]);
   }
 }
 
