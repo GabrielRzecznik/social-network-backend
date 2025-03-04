@@ -2,8 +2,9 @@ import PublicationRepository from "../repositories/publication.repository.js";
 
 // Crear publicación
 export const createNewPublication = async (req, res) => {
-  const { id_user, content_publication, img_publication } = req.body;
-
+  const id_user = req.user.id_user;
+  const { content_publication, img_publication } = req.body;
+  
   try {
     const newPublication = await PublicationRepository.createPublication({ id_user, content_publication, img_publication });
     res.status(201).json({ message: "Publicación creada", publication: newPublication });
