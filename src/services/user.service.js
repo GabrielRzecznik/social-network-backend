@@ -1,5 +1,6 @@
 // services/UserService.js
 import UserRepository from '../repositories/user.repository.js';
+import { generateAccessToken, verifyRefreshToken } from '../services/auth.service.js';
 import bcrypt from 'bcryptjs';
 
 class UserService {
@@ -61,6 +62,17 @@ class UserService {
 
     const hashedPassword = await bcrypt.hash(new_password, 10);
     return await UserRepository.updatePassword(id_user, hashedPassword);
+  }
+
+  async refreshAccessToken(refreshToken) {
+    if (!refreshToken) throw new Error("No hay refresh token");
+  
+    const decoded = verifyRefreshToken(refreshToken);
+  
+    const user = await UserRepository.getUserById(decoded.id_user);
+    if (!user) throw new Error("Usuario no encontrado");
+  
+    return generateAccessToken(user);
   }
 }
 
