@@ -31,15 +31,13 @@ export const updateStatusPublication = async (req, res) => {
   const { id_publication, status_publication } = req.body;
 
   try {
-    const updatedStatusPublication = await PublicationRepository.updateStatusPublication({
-      id_publication, status_publication
-    });
+    const updatedStatusPublication = await PublicationService.updateStatusPublication(id_publication, status_publication);
 
     res.json({
       message: "Status de publicación actualizado exitosamente",
       publication: updatedStatusPublication
     });
   } catch (error) {
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(400).json({ message: error.message });
   }
 };
