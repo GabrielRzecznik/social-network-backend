@@ -1,5 +1,4 @@
 import PublicationService from "../services/publication.service.js";
-import PublicationRepository from "../repositories/publication.repository.js";
 
 // Crear publicación
 export const createNewPublication = async (req, res) => {
@@ -7,10 +6,10 @@ export const createNewPublication = async (req, res) => {
   const { content_publication, img_publication } = req.body;
   
   try {
-    const newPublication = await PublicationRepository.createPublication({ id_user, content_publication, img_publication });
-    res.status(201).json({ message: "Publicación creada", publication: newPublication });
+      const newPublication = await PublicationService.createPublication(id_user, content_publication, img_publication);
+      res.status(201).json({ message: "Publicación creada", publication: newPublication });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
   }
 };
 

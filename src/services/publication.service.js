@@ -1,6 +1,10 @@
 import PublicationRepository from '../repositories/publication.repository.js';
 
 class PublicationService {
+    async createPublication(id_user, content_publication, img_publication) {
+        return PublicationRepository.createPublication({ id_user, content_publication, img_publication });
+    }
+    
     async updatePublication(id_publication, content_publication, img_publication) {
         const publicationData = await PublicationRepository.getPublicationById(id_publication);
         
