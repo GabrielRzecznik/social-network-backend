@@ -6,7 +6,7 @@ const router = Router();
 
 // Rutas con validación de usuario por token
 router.post("/create", protectRoute, createNewPublication);
-router.put("/:id_publication", protectRoute, updatePublication);
+router.put("/update", protectRoute, updatePublication);
 router.patch("/status", protectRoute, updateStatusPublication);
 
 export default router;

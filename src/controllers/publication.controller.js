@@ -1,3 +1,4 @@
+import PublicationService from "../services/publication.service.js";
 import PublicationRepository from "../repositories/publication.repository.js";
 
 // Crear publicación
@@ -15,29 +16,14 @@ export const createNewPublication = async (req, res) => {
 
 // Editar publicación
 export const updatePublication = async (req, res) => {
-  const { id_publication } = req.params;
-  const { content_publication, img_publication } = req.body;
+  const { id_publication, content_publication, img_publication } = req.body;
 
   try {
-    const publicationData = await PublicationRepository.getPublicationById(id_publication);
+    const updatedPublication = await PublicationService.updatePublication(id_publication, content_publication, img_publication);
 
-    if (
-      publicationData.content_publication === content_publication &&
-      publicationData.img_publication === img_publication
-    ) {
-      return res.status(200).json({ message: "No se realizaron cambios" });
-    }
-
-    const updatedPublication = await PublicationRepository.updatePublication(id_publication, {
-      content_publication, img_publication
-    });
-
-    res.json({
-      message: "Publicación actualizada exitosamente",
-      publication: updatedPublication
-    });
+    res.json({ message: 'Publicación actualizada exitosamente', publication: updatedPublication });
   } catch (error) {
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(400).json({ message: error.message });
   }
 };
 

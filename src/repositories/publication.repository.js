@@ -14,14 +14,14 @@ class PublicationRepository {
   }
 
   // Obtener publicación por su ID
-  static async getPublicationById(id_publication) {
+  async getPublicationById(id_publication) {
     const query = `SELECT * FROM "publication" WHERE id_publication = $1`;
     const result = await pool.query(query, [id_publication]);
     return result.rows[0] ? new Publication(result.rows[0]) : null;
   }
 
   // Editar publicación
-  static async updatePublication(id_publication, { content_publication, img_publication }) {
+  async updatePublication(id_publication, { content_publication, img_publication }) {
     const query = `
       UPDATE "publication"
       SET content_publication = $1, img_publication = $2
@@ -33,7 +33,7 @@ class PublicationRepository {
   }
 
   // Editar status de publicación
-  static async updateStatusPublication({ id_publication, status_publication }) {
+  async updateStatusPublication({ id_publication, status_publication }) {
     const query = `
       UPDATE "publication"
       SET status_publication = $2
