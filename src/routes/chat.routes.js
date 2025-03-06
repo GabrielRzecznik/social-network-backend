@@ -6,6 +6,6 @@ const router = Router();
 
 router.get("/chat-list", protectRoute, getUserChats);
 router.post("/:id_chat", getChat);
-router.patch("/update", updateChat);
+router.patch("/update", protectRoute, updateChat);
 
 export default router;
