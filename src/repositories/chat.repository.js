@@ -42,6 +42,16 @@ class ChatRepository {
     const result = await pool.query(query, [id_chat, status_chat]);
     return result.rows[0] ? new Chat(result.rows[0]) : null;
   }
+
+  async getChat(id_chat) {
+    const query = `
+      SELECT id_chat, id_user1, id_user2, status_chat
+      FROM "chat"
+      WHERE id_chat = $1;
+    `;
+    const result = await pool.query(query, [id_chat]);
+    return result.rows[0] ? new Chat(result.rows[0]) : null;
+  }
 }
 
 export default new ChatRepository();

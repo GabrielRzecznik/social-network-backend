@@ -31,9 +31,9 @@ export const updateChat = async (req, res) => {
 
   try {
     const chat = await ChatService.updateChat(id_chat, status_chat);
-    res.status(200).json({ chat });
+    res.json({ message: 'Chat actualizado correctamente' });
   } catch (error) {
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(400).json({ message: error.message });
   }
 };
 
