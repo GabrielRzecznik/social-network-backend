@@ -6,9 +6,10 @@ export const getUserChats = async (req, res) => {
   const id_user = req.user.id_user;
 
   try {
-    const chats = await ChatService.getUserChats({ id_user });
-    res.status(200).json({ chats });
+    const chats = await ChatService.getUserChats(id_user);
+    res.status(200).json({message: "Publicación creada", chats: chats});
   } catch (error) {
+    console.error("Error en getUserChats:", error);
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
