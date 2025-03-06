@@ -3,7 +3,7 @@ import Message from "../models/message.model.js";
 
 // Obtener chats de un usuario
 export const getUserChats = async (req, res) => {
-  const { id_user } = req.body;
+  const id_user = req.user.id_user;
 
   try {
     const chats = await ChatService.getUserChats({ id_user });
