@@ -5,8 +5,8 @@ class ChatService {
         return ChatRepository.getUserChats(id_user); 
     }
     
-    async updateChat(id_chat, status) {
-        return ChatRepository.updateChat(id_chat, status);
+    async updateChat(id_chat, status_chat) {
+        return ChatRepository.updateChat(id_chat, status_chat);
     }
 }
 

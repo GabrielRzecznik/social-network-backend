@@ -32,7 +32,7 @@ class ChatRepository {
     return result.rows[0] ? new Chat(result.rows[0]) : null;
   }
 
-  async updateChat({ id_chat, status_chat }) {
+  async updateChat(id_chat, status_chat) {
     const query = `
       UPDATE "chat"
       SET status_chat = $2
