@@ -46,10 +46,10 @@ export const updateUser = async (req, res) => {
 
 export const updateStatus = async (req, res) => {
   const id_user = req.user.id_user;
-  const { status_chat } = req.body;
+  const { status } = req.body;
 
   try {
-    const updatedStatus = await userService.updateStatus(id_user, status_chat);
+    const updatedStatus = await userService.updateStatus(id_user, status);
     res.json({ message: 'Estado usuario actualizado exitosamente', user: updatedStatus });
   } catch (error) {
     res.status(400).json({ message: error.message });

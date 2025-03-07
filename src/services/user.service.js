@@ -53,6 +53,14 @@ class UserService {
     return await userRepository.updateUser(id_user, userData);
   }
 
+  async updateStatus(id_user, status) {
+          const user = await ChatRepository.getUserById(id_user);
+          if (!user) throw new Error('Usuario no encontrado');
+          if (user.status === status) throw new Error('Estado sin cambios');
+          
+          return ChatRepository.updateChat(id_chat, status);
+  }
+
   async updatePassword(id_user, current_password, new_password) {
     const user = await userRepository.getUserById(id_user);
     if (!user) throw new Error('Usuario no encontrado');
