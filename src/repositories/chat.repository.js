@@ -1,4 +1,4 @@
-import pool from "../config/db.js";
+import pool from '../config/db.js';
 import Chat from '../models/chat.model.js';
 
 class ChatRepository {
