@@ -2,24 +2,24 @@ import pool from '../config/db.js';
 import User from '../models/user.model.js';
 
 class UserRepository {
-  async registerUser({ name, surname, email, username, birthdate, password, img_user }) {
+  async registerUser({ name, surname, email, username, birthdate, password, img }) {
     const query = `
-      INSERT INTO "user" (name, surname, email, username, birthdate, password, img_user)
+      INSERT INTO "user" (name, surname, email, username, birthdate, password, img)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING id_user, name, surname, email, username, TO_CHAR(birthdate, 'YYYY-MM-DD') AS birthdate, img_user;
+      RETURNING id_user, name, surname, email, username, TO_CHAR(birthdate, 'YYYY-MM-DD') AS birthdate, img;
     `;
-    const result = await pool.query(query, [name, surname, email, username, birthdate, password, img_user]);
+    const result = await pool.query(query, [name, surname, email, username, birthdate, password, img]);
     return new User(result.rows[0]);
   }
 
-  async updateUser(id, { name, surname, email, username, birthdate, img_user }) {
+  async updateUser(id, { name, surname, email, username, birthdate, img }) {
     const query = `
       UPDATE "user"
-      SET name = $1, surname = $2, email = $3, username = $4, birthdate = $5, img_user = $6
-      WHERE id_user = $7
-      RETURNING id_user, name, surname, email, username, TO_CHAR(birthdate, 'YYYY-MM-DD') AS birthdate, img_user;
+      SET name = $2, surname = $3, email = $4, username = $5, birthdate = $6, img = $7
+      WHERE id_user = $1
+      RETURNING id_user, name, surname, email, username, TO_CHAR(birthdate, 'YYYY-MM-DD') AS birthdate, img;
     `;
-    const result = await pool.query(query, [name, surname, email, username, birthdate, img_user, id]);
+    const result = await pool.query(query, [id, name, surname, email, username, birthdate, img]);
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
 
@@ -45,7 +45,7 @@ class UserRepository {
         u.username,
         u.password,
         TO_CHAR(u.birthdate, 'YYYY-MM-DD') AS birthdate,
-        u.img_user
+        u.img
       FROM "user" u
       WHERE email = $1 OR username = $2;
     `;
