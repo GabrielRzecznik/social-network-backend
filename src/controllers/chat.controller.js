@@ -27,10 +27,10 @@ export const getChat = async (req, res) => {
 
 // Actualizar status de un chat
 export const updateChat = async (req, res) => {
-  const { id_chat, status_chat } = req.body;
+  const { id_chat, status } = req.body;
 
   try {
-    const chat = await ChatService.updateChat(id_chat, status_chat);
+    const chat = await ChatService.updateChat(id_chat, status);
     res.json({ message: 'Chat actualizado exitosamente', chat: chat });
   } catch (error) {
     res.status(400).json({ message: error.message });
