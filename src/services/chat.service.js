@@ -5,12 +5,12 @@ class ChatService {
         return ChatRepository.getUserChats(id_user); 
     }
     
-    async updateChat(id_chat, status_chat) {
+    async updateChat(id_chat, status) {
         const chat = await ChatRepository.getChat(id_chat);
         if (!chat) throw new Error('Chat no encontrado');
-        if (chat.status_chat === status_chat) throw new Error('El estado ya está actualizado');
+        if (chat.status_chat === status) throw new Error('Estado sin cambios');
         
-        return ChatRepository.updateChat(id_chat, status_chat);
+        return ChatRepository.updateChat(id_chat, status);
     }
 }
 
