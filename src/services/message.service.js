@@ -1,5 +1,5 @@
+import ChatRepository from '../repositories/chat.repository.js';
 import MessageRepository from '../repositories/message.repository.js';
-import ChatService from '../services/chat.service.js';
 
 class MessageService {
     async sendMessage(
@@ -10,9 +10,9 @@ class MessageService {
         status_message
     ) {
         // Verificar si el chat ya existe entre los dos usuarios
-        let chat = await ChatService.findChatByUsers(sender_message, receiver_message);
+        let chat = await ChatRepository.findChatByUsers(sender_message, receiver_message);
         if (!chat) {
-            chat = await ChatService.createChat(sender_message, receiver_message);
+            chat = await ChatRepository.createChat(sender_message, receiver_message);
         }
 
         return MessageRepository.sendMessage({

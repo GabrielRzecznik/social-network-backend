@@ -12,14 +12,6 @@ class ChatService {
         
         return ChatRepository.updateChat(id_chat, status_chat);
     }
-
-    async findChatByUsers(sender_message, receiver_message) {
-        return ChatRepository.findChatByUsers(sender_message, receiver_message);
-    }
-
-    async createChat(sender_message, receiver_message) {
-        return ChatRepository.createChat(sender_message, receiver_message);
-    }
 }
 
 export default new ChatService();
