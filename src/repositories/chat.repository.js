@@ -24,29 +24,27 @@ class ChatRepository {
   
   async getUserChats(id_user) {
     const query = `
-      SELECT id_chat, id_user1, id_user2, status_chat
-      FROM "chat"
-      WHERE id_user1 = $1 OR id_user2 = $1 AND status_chat = 1;
+      SELECT * FROM "chat"
+      WHERE id_user1 = $1 OR id_user2 = $1;
     `;
     const result = await pool.query(query, [id_user]);
     return result.rows[0] ? new Chat(result.rows[0]) : null;
   }
 
-  async updateChat(id_chat, status_chat) {
+  async updateChat(id_chat, status) {
     const query = `
       UPDATE "chat"
-      SET status_chat = $2
+      SET status = $2
       WHERE id_chat = $1
       RETURNING *;
     `;
-    const result = await pool.query(query, [id_chat, status_chat]);
+    const result = await pool.query(query, [id_chat, status]);
     return result.rows[0] ? new Chat(result.rows[0]) : null;
   }
 
   async getChat(id_chat) {
     const query = `
-      SELECT id_chat, id_user1, id_user2, status_chat
-      FROM "chat"
+      SELECT * FROM "chat"
       WHERE id_chat = $1;
     `;
     const result = await pool.query(query, [id_chat]);
