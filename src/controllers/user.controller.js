@@ -31,7 +31,7 @@ export const loginUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const id_user = req.user.id_user;
-  if (isNaN(id_user)) return res.status(400).json({ message: 'ID inválido' });
+  if (isNaN(id_user)) return res.status(400).json({ message: 'Usuario inválido' });
 
   try {
     const updatedUser = await userService.updateUser(id_user, req.body);
@@ -44,13 +44,25 @@ export const updateUser = async (req, res) => {
   }
 };
 
+export const updateStatus = async (req, res) => {
+  const id_user = req.user.id_user;
+  const { status_chat } = req.body;
+
+  try {
+    const updatedStatus = await userService.updateStatus(id_user, status_chat);
+    res.json({ message: 'Estado usuario actualizado exitosamente', user: updatedStatus });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export const updatePassword = async (req, res) => {
   const id_user = req.user.id_user;
   const { current_password, new_password } = req.body;
 
   try {
     await userService.updatePassword(id_user, current_password, new_password);
-    res.json({ message: 'Contraseña actualizada correctamente' });
+    res.json({ message: 'Contraseña actualizada exitosamente' });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
