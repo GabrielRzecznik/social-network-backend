@@ -1,9 +1,10 @@
-import { Router } from "express";
-import { sendMessage, updateMessage } from "../controllers/message.controller.js";
+import { Router } from 'express';
+import { sendMessage, updateMessage } from '../controllers/message.controller.js';
+import { protectRoute } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
-router.post("/send", sendMessage);
-router.put("/update", updateMessage);
+router.post('/send', protectRoute, sendMessage);
+router.put('/update', protectRoute, updateMessage);
 
 export default router;
