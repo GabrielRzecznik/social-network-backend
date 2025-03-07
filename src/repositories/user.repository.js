@@ -23,8 +23,24 @@ class UserRepository {
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
 
+  async updateStatus(id_user, status) {
+    const query = `
+      UPDATE "user" 
+      SET status = $2
+      WHERE id_user = $1
+      RETURNING *;
+    `;
+    const result = await pool.query(query, [id_user, status]);
+    return result.rows[0] ? new User(result.rows[0]) : null;
+  }
+
   async updatePassword(id_user, new_password) {
-    const query = `UPDATE "user" SET password = $2 WHERE id_user = $1 RETURNING *;`;
+    const query = `
+      UPDATE "user" 
+      SET password = $2 
+      WHERE id_user = $1 
+      RETURNING *;
+    `;
     const result = await pool.query(query, [id_user, new_password]);
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
