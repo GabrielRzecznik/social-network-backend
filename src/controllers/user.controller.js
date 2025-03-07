@@ -38,7 +38,7 @@ export const updateUser = async (req, res) => {
 
     const { password: _, ...userData } = updatedUser;
 
-    res.json({ message: 'Usuario actualizado', user: userData });
+    res.json({ message: 'Usuario actualizado exitosamente', user: userData });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
