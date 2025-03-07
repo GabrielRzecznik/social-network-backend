@@ -1,5 +1,5 @@
 import MessageRepository from '../repositories/message.repository.js';
-import ChatService from '../service/chat.service.js';
+import ChatService from '../services/chat.service.js';
 
 class MessageService {
     async sendMessage(
@@ -25,8 +25,12 @@ class MessageService {
         });
     }
     
-    async updateMessage(id_message, content_message) {
-        return MessageRepository.updateMessage(id_message, content_message);
+    async updateContentMessage(id_message, content_message) {
+        return MessageRepository.updateContentMessage(id_message, content_message);
+    }
+
+    async updateStatusMessage(id_message, status_message) {
+        return MessageRepository.updateStatusMessage(id_message, status_message);
     }
 }
 

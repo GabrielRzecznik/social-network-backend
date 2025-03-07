@@ -12,19 +12,31 @@ class MessageRepository {
     return new Message(result.rows[0]);
   }
 
-  async updateMessage(id_message, content_message) {
+  async updateContentMessage(id_message, content_message) {
     const query = `
-    UPDATE "message"
-    SET content_message = $1, status_message = 3
-    WHERE id_message = $2
-    RETURNING id_message, sender_message, receiver_message, content_message, timestamp_message, status_message;
+      UPDATE "message"
+      SET content_message = $1, status_message = 3
+      WHERE id_message = $2
+      RETURNING id_message, sender_message, receiver_message, content_message, timestamp_message, status_message;
     `;
 
     const result = await pool.query(query, [content_message, id_message]);
     return result.rows[0] ? new Message(result.rows[0]) : null;
   }
 
-  async getChatMessages(id_chat) {
+  async updateStatusMessage(id_message, status_message) {
+    const query = `
+      UPDATE "message"
+      SET status_message = $2
+      WHERE id_message = $1
+      RETURNING id_message, sender_message, receiver_message, content_message, timestamp_message, status_message;
+    `;
+
+    const result = await pool.query(query, [id_message, status_message]);
+    return result.rows[0] ? new Message(result.rows[0]) : null;
+  }
+
+  async getChatContentMessages(id_chat) {
     const query = `
       SELECT id_message, sender_message, receiver_message, content_message, timestamp_message, status_message
       FROM "message"

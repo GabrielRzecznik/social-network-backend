@@ -1,4 +1,4 @@
-import MessageService from '../service/message.service.js';
+import MessageService from '../services/message.service.js';
 import { getCurrentTimestamp } from '../utils/timesstampUtils.js';
 
 // Enviar mesanje
@@ -21,15 +21,29 @@ export const sendMessage = async (req, res) => {
   }
 };
 
-// Editar mensaje
-export const updateMessage = async (req, res) => {
+// Editar contenido de un mensaje
+export const updateContentMessage = async (req, res) => {
   const { id_message, content_message } = req.body;
 
   try {
-    const updatedMessage = await MessageService.updateMessage({ id_message, content_message });
+    const updatedContentMessage = await MessageService.updateContentMessage({ id_message, content_message });
     
-    res.status(200).json({ message: "Mensaje actualizado exitosamente", message: updatedMessage });
+    res.status(200).json({ message: "Mensaje actualizado exitosamente", message: updatedContentMessage });
   } catch (error) {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
+
+//Editar status de un mensaje
+export const updateStatusMessage = async (req, res) => {
+  const { id_message, status_message } = req.body;
+
+  try {
+
+    const updatedStatusMessage = await MessageService.updateStatusMessage({ id_message, status_message });
+
+    res.status(200).json({ message: "Estado del mensaje actualizado exitosamente", message: updatedStatusMessage });
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+}
