@@ -1,5 +1,5 @@
 import ChatService from "../services/chat.service.js";
-import Message from "../models/message.model.js";
+import Message from "../repositories/message.repository.js";
 
 // Obtener chats de un usuario
 export const getUserChats = async (req, res) => {
