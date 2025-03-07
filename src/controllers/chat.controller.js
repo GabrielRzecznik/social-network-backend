@@ -7,7 +7,7 @@ export const getUserChats = async (req, res) => {
 
   try {
     const chats = await ChatService.getUserChats(id_user);
-    res.status(200).json({message: 'Publicación creada', chats: chats});
+    res.status(200).json({message: 'Publicación creada exitosamente', chats: chats});
   } catch (error) {
     console.error('Error en getUserChats:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
