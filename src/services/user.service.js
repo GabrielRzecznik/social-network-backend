@@ -40,7 +40,7 @@ class UserService {
 
     //Valida password
     const samePassword = await bcrypt.compare(userData.password, currentUser.password);
-    if (samePassword) throw new Error('Password invalido');
+    if (!samePassword) throw new Error('Contraseña incorrecta');
 
     //Valida cambios
     const filteredUserData = Object.fromEntries(
