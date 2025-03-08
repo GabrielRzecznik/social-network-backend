@@ -53,7 +53,7 @@ const userRegisterSchema = Joi.object({
     'string.pattern.base': 'La contraseña debe contener al menos una letra mayúscula y un número.',
     'any.required': 'La contraseña es obligatoria.',
   }),
-  img_user: Joi.string().uri().optional().messages({
+  img: Joi.string().uri().optional().messages({
     'string.uri': 'La URL de la imagen no es válida.',
   }),
 });
