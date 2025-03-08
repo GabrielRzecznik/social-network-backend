@@ -38,8 +38,17 @@ class UserService {
       currentUser.birthdate = currentUser.birthdate.toISOString().split('T')[0]; 
     }
 
-    const isSameData = Object.keys(userData).every(key => {
-      return String(currentUser[key]) === String(userData[key]);
+    //Valida password
+    const samePassword = await bcrypt.compare(userData.password, currentUser.password);
+    if (samePassword) throw new Error('Password invalido');
+
+    //Valida cambios
+    const filteredUserData = Object.fromEntries(
+      Object.entries(userData).filter(([key]) => key !== "password")
+    );
+
+    const isSameData = Object.keys(filteredUserData).every(key => {
+      return String(currentUser[key]) === String(filteredUserData[key]);
     });
 
     if (isSameData) throw new Error('No hay cambios en los datos del usuario');

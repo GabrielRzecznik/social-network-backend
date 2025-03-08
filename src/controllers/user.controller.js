@@ -31,11 +31,9 @@ export const loginUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const id_user = req.user.id_user;
-  if (isNaN(id_user)) return res.status(400).json({ message: 'Usuario inválido' });
 
   try {
     const updatedUser = await userService.updateUser(id_user, req.body);
-
     const { password: _, ...userData } = updatedUser;
 
     res.json({ message: 'Usuario actualizado exitosamente', user: userData });
