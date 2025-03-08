@@ -1,9 +1,9 @@
-import userService from '../services/user.service.js';
+import UserService from '../services/user.service.js';
 import { generateAccessToken, generateRefreshToken } from '../services/auth.service.js';
 
 export const registerUser = async (req, res) => {
   try {
-    const newUser = await userService.registerUser(req.body);
+    const newUser = await UserService.registerUser(req.body);
     
     const { password: _, ...userData } = newUser;
     
@@ -16,7 +16,7 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, username, password } = req.body;
   try {
-    const user = await userService.loginUser(email, username, password);
+    const user = await UserService.loginUser(email, username, password);
     
     const { password: _, ...userData } = user;
     
@@ -33,7 +33,7 @@ export const updateUser = async (req, res) => {
   const id_user = req.user.id_user;
 
   try {
-    const updatedUser = await userService.updateUser(id_user, req.body);
+    const updatedUser = await UserService.updateUser(id_user, req.body);
     const { password: _, ...userData } = updatedUser;
 
     res.json({ message: 'Usuario actualizado exitosamente', user: userData });
@@ -47,7 +47,7 @@ export const updateStatus = async (req, res) => {
   const { status } = req.body;
 
   try {
-    const updatedStatus = await userService.updateStatus(id_user, status);
+    const updatedStatus = await UserService.updateStatus(id_user, status);
     res.json({ message: 'Estado usuario actualizado exitosamente', user: updatedStatus });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -59,7 +59,7 @@ export const updatePassword = async (req, res) => {
   const { current_password, new_password } = req.body;
 
   try {
-    await userService.updatePassword(id_user, current_password, new_password);
+    await UserService.updatePassword(id_user, current_password, new_password);
     res.json({ message: 'Contraseña actualizada exitosamente' });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -68,7 +68,7 @@ export const updatePassword = async (req, res) => {
 
 export const refreshAccessToken = async (req, res) => {
   try {
-    const newAccessToken = await userService.refreshAccessToken(req.body.refreshToken);
+    const newAccessToken = await UserService.refreshAccessToken(req.body.refreshToken);
     res.json({ accessToken: newAccessToken });
   } catch (error) {
     res.status(401).json({ message: error.message });
