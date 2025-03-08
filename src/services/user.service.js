@@ -1,4 +1,4 @@
-import { userRegisterSchema } from "../validators/user.validator.js";
+import { userRegisterSchema } from '../validators/user.validator.js';
 import UserRepository from '../repositories/user.repository.js';
 import { generateAccessToken, verifyRefreshToken } from '../services/auth.service.js';
 import bcrypt from 'bcryptjs';
@@ -85,12 +85,12 @@ class UserService {
   }
 
   async refreshAccessToken(refreshToken) {
-    if (!refreshToken) throw new Error("No hay refresh token");
+    if (!refreshToken) throw new Error('No hay refresh token');
   
     const decoded = verifyRefreshToken(refreshToken);
   
     const user = await UserRepository.getUserById(decoded.id_user);
-    if (!user) throw new Error("Usuario no encontrado");
+    if (!user) throw new Error('Usuario no encontrado');
   
     return generateAccessToken(user);
   }
