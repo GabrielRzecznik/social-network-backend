@@ -71,6 +71,9 @@ class UserService {
   }
 
   async updatePassword(id_user, current_password, new_password) {
+    const { error } = userRegisterSchema.extract('password').validate(new_password);
+    if (error) throw new Error(error.details[0].message);
+
     const user = await UserRepository.getUserById(id_user);
     if (!user) throw new Error('Usuario no encontrado');
 
