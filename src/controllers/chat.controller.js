@@ -1,7 +1,6 @@
 import ChatService from '../services/chat.service.js';
-import Message from '../repositories/message.repository.js';
+import MessageService from '../services/message.service.js';
 
-// Obtener chats de un usuario
 export const getUserChats = async (req, res) => {
   const id_user = req.user.id_user;
 
@@ -14,18 +13,16 @@ export const getUserChats = async (req, res) => {
   }
 };
 
-// Obtener mensajes de un chat
 export const getChat = async (req, res) => {
   const { id_chat } = req.params;
   try {
-    const messages = await Message.getChatMessages(id_chat);
+    const messages = await MessageService.getChatMessages(id_chat);
     res.status(200).json({ messages });
   } catch (error) {
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
 
-// Actualizar status de un chat
 export const updateChat = async (req, res) => {
   const { id_chat, status } = req.body;
 

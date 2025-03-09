@@ -32,6 +32,10 @@ class MessageService {
     async updateStatusMessage(id_message, status_message) {
         return MessageRepository.updateStatusMessage(id_message, status_message);
     }
+
+    async getChatMessages(id_chat) {
+        return MessageRepository.getChatMessages(id_chat);
+    }
 }
 
 export default new MessageService();
