@@ -12,7 +12,7 @@ const calculateAge = (birthdate) => {
   return age;
 };
 
-const userRegisterSchema = Joi.object({
+const userDataSchema = Joi.object({
   name: Joi.string().min(3).max(50).required().messages({
     'string.base': 'El nombre debe ser una cadena de texto.',
     'string.min': 'El nombre debe tener al menos 3 caracteres.',
@@ -58,4 +58,4 @@ const userRegisterSchema = Joi.object({
   }),
 });
 
-export { userRegisterSchema };
+export { userDataSchema };

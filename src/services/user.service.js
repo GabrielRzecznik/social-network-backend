@@ -1,11 +1,11 @@
-import { userRegisterSchema } from '../validators/user.validator.js';
+import { userDataSchema } from '../validators/user.validator.js';
 import UserRepository from '../repositories/user.repository.js';
 import { generateAccessToken, verifyRefreshToken } from '../services/auth.service.js';
 import bcrypt from 'bcryptjs';
 
 class UserService {
   async registerUser(userData) {
-    const { error } = userRegisterSchema.validate(userData);
+    const { error } = userDataSchema.validate(userData);
     if (error) throw new Error(error.details[0].message);
 
     const { email, username } = userData;
@@ -31,6 +31,9 @@ class UserService {
   }
 
   async updateUser(id_user, userData) {
+    const { error } = userDataSchema.validate(userData);
+    if (error) throw new Error(error.details[0].message);
+
     const currentUser = await UserRepository.getUserById(id_user);
     if (!currentUser) throw new Error('Usuario no encontrado');
 
@@ -71,7 +74,7 @@ class UserService {
   }
 
   async updatePassword(id_user, current_password, new_password) {
-    const { error } = userRegisterSchema.extract('password').validate(new_password);
+    const { error } = userDataSchema.extract('password').validate(new_password);
     if (error) throw new Error(error.details[0].message);
 
     const user = await UserRepository.getUserById(id_user);
