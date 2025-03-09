@@ -4,7 +4,7 @@ import { protectRoute } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
-router.get('chat-list', protectRoute, getUserChats);
+router.get('list', protectRoute, getUserChats);
 router.post('/:id_chat', protectRoute, getChat);
 router.patch('/update', protectRoute, updateChat);
 
