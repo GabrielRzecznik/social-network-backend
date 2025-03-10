@@ -7,7 +7,7 @@ class PostRepository {
     const query = `
       INSERT INTO "post" (id_user, content, img)
       VALUES ($1, $2, $3)
-      RETURNING id_publication, id_user, content, img, status;
+      RETURNING id_post, id_user, content, img, status;
     `;
     const result = await pool.query(query, [id_user, content, img]);
     return new Post(result.rows[0]);
