@@ -1,4 +1,4 @@
-import pool from "../config/db.js";
+import pool from '../config/db.js';
 import Message from '../models/message.model.js';
 
 class MessageRepository {
