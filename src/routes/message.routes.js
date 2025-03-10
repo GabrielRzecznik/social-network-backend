@@ -5,7 +5,7 @@ import { protectRoute } from '../middlewares/auth.middleware.js';
 const router = Router();
 
 router.post('/send', protectRoute, sendMessage);
-router.patch('/update-content', protectRoute, updateContentMessage);
-router.patch('/update-status', protectRoute, updateStatusMessage);
+router.patch('/content', protectRoute, updateContentMessage);
+router.patch('/status', protectRoute, updateStatusMessage);
 
 export default router;
