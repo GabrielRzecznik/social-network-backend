@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.routes.js";
-import publicationRoutes from "./routes/publication.routes.js";
+import postRoutes from "./routes/post.routes.js";
 import followRoutes from "./routes/follow.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", userRoutes);
-app.use("/api/publication", publicationRoutes);
+app.use("/api/post", postRoutes);
 app.use("/api/follow", followRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/chat", chatRoutes);
