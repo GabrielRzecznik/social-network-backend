@@ -33,7 +33,7 @@ class PostRepository {
   }
 
   // Actualizar status post
-  async updateStatusPost({ id_post, status }) {
+  async updateStatusPost(id_post, status) {
     const query = `
       UPDATE "post"
       SET status = $2
