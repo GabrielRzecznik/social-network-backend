@@ -3,34 +3,34 @@ import MessageRepository from '../repositories/message.repository.js';
 
 class MessageService {
     async sendMessage(
-        sender_message, 
-        receiver_message, 
-        content_message, 
-        timestamp_message, 
-        status_message
+        sender, 
+        receiver, 
+        content, 
+        timestamp, 
+        status
     ) {
         // Verificar si el chat ya existe entre los dos usuarios
-        let chat = await ChatRepository.findChatByUsers(sender_message, receiver_message);
+        let chat = await ChatRepository.findChatByUsers(sender, receiver);
         if (!chat) {
-            chat = await ChatRepository.createChat(sender_message, receiver_message);
+            chat = await ChatRepository.createChat(sender, receiver);
         }
 
-        return MessageRepository.sendMessage({
-            sender_message, 
-            receiver_message, 
-            content_message, 
-            timestamp_message, 
-            status_message,
-            id_chat: chat.id_chat
-        });
+        return MessageRepository.sendMessage(
+            sender, 
+            receiver, 
+            content, 
+            timestamp, 
+            status,
+            chat.id_chat
+        );
     }
     
-    async updateContentMessage(id_message, content_message) {
-        return MessageRepository.updateContentMessage(id_message, content_message);
+    async updateContentMessage(id_message, content) {
+        return MessageRepository.updateContentMessage(id_message, content);
     }
 
     async updateStatusMessage(id_message, status_message) {
-        return MessageRepository.updateStatusMessage(id_message, status_message);
+        return MessageRepository.updateStatusMessage(id_message, status);
     }
 
     async getChatMessages(id_chat) {

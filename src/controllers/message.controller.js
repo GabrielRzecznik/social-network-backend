@@ -3,17 +3,17 @@ import { getCurrentTimestamp } from '../utils/timesstampUtils.js';
 
 // Enviar mesanje
 export const sendMessage = async (req, res) => {
-  const { sender_message, receiver_message, content_message } = req.body;
-  const timestamp_message = getCurrentTimestamp();
-  const status_message = 1;
+  const { sender, receiver, content } = req.body;
+  const timestamp = getCurrentTimestamp();
+  const status = 1;
 
   try {
     const newMessage = await MessageService.sendMessage(
-      sender_message, 
-      receiver_message,
-      content_message, 
-      timestamp_message, 
-      status_message
+      sender, 
+      receiver,
+      content, 
+      timestamp, 
+      status
     );
 
     res.status(201).json({ message: 'Mensaje enviado exitosamente', message: newMessage });
