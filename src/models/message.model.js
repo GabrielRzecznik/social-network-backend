@@ -1,11 +1,11 @@
 class Message {
-  constructor({ id_message, sender_message, receiver_message, content_message, timestamp_message, status_message, id_chat }) {
+  constructor({ id_message, sender, receiver, content, timestamp, status, id_chat }) {
     this.id_message = id_message;
-    this.sender_message = sender_message;
-    this.receiver_message = receiver_message;
-    this.content_message = content_message;
-    this.timestamp_message = timestamp_message;
-    this.status_message = status_message;
+    this.sender = sender;
+    this.receiver = receiver;
+    this.content = content;
+    this.timestamp = timestamp;
+    this.status = status;
     this.id_chat = id_chat;
 
   }
