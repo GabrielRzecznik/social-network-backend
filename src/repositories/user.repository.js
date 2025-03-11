@@ -40,8 +40,7 @@ class UserRepository {
     const query = `
       UPDATE "user" 
       SET password = $2 
-      WHERE id_user = $1 
-      RETURNING *;
+      WHERE id_user = $1;
     `;
     const result = await pool.query(query, [id_user, new_password]);
     return result.rows[0] ? new User(result.rows[0]) : null;
