@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { addFollow, removeFollow, getFollowsCount, getFollowers, getFollowings } from '../controllers/follow.controller.js';
+import { addFollow, updateStatusFollow, getFollowsCount, getFollowers, getFollowings } from '../controllers/follow.controller.js';
 
 const router = Router();
 
 router.post('/add', addFollow);
-router.patch('/remove', removeFollow);
-router.get('/follows-count', getFollowsCount);
+router.patch('/status', updateStatusFollow);
+router.get('/count', getFollowsCount);
 router.get('/followers', getFollowers);
 router.get('/followings', getFollowings);
 

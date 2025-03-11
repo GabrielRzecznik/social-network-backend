@@ -1,21 +1,14 @@
-import Follow from "../models/follow.model.js";
+import FollowService from '../services/follow.service.js';
 
 // Seguir un usuario
 export const addFollow = async (req, res) => {
-  const { id_user_1, id_user_2 } = req.body;
-
-  const followIdResult = await Follow.findFollowId(id_user_1, id_user_2);
-  if (followIdResult && followIdResult.status_follow === false) {
-    const id_follow = followIdResult.id_follow;
-    
-    const result = await Follow.toggleFollow(id_follow, true);
-    return res.status(200).json({ message: 'Follow reactivado exitosamente', follow: result });
-  }else if (followIdResult && followIdResult.status_follow === true) {
-    return res.status(500).json({ message: 'El usuario ya sigues al otro usuario' });
-  }
+  const id_user_1 = req.user.id_user;
+  const { id_user_2 } = req.body;
 
   try {
-    const newFollow = await Follow.addFollow({ id_user_1, id_user_2 });
+    await FollowService.findFollowId(id_user_1, id_user_2);
+    
+    const newFollow = await FollowService.addFollow(id_user_1, id_user_2);
     
     res.status(201).json({ message: "Follow creado exitosamente", follow: newFollow });
   } catch (error) {
@@ -23,25 +16,16 @@ export const addFollow = async (req, res) => {
   }
 };
 
-// Dejar de seguir un usuario
-export const removeFollow = async (req, res) => {
-  const { id_user_1, id_user_2 } = req.body;
-
-  const followIdResult = await Follow.findFollowId(id_user_1, id_user_2);
-  if (!followIdResult) {
-    return res.status(500).json({ message: 'No se encontro el follow' });
-  }else if (followIdResult && followIdResult.status_follow === false) {
-    return res.status(500).json({ message: 'El usuario no sigue al otro usuario' });
-  }
-  
-  const id_follow = followIdResult.id_follow
+// Actualizar status follow
+export const updateStatusFollow = async (req, res) => {
+  const { id_follow, status } = req.body;
   
   try {
-    const result = await Follow.toggleFollow(id_follow, false);
+    const follow = await FollowService.toggleFollow(id_follow, status);
 
     res.json({
       message: "Follow revocado exitosamente",
-      user: result
+      follow: follow
     });
   } catch (error) {
     res.status(500).json({ message: "Error interno del servidor" });
@@ -53,7 +37,7 @@ export const getFollowsCount = async (req, res) => {
   const { id_user } = req.body;  
   
   try {
-    const followStats = await Follow.getFollowsCount( id_user );
+    const followStats = await FollowService.getFollowsCount( id_user );
 
     res.json({
       message: "Follows obtenidos exitosamente",
@@ -69,7 +53,7 @@ export const getFollowers = async (req, res) => {
   const { id_user } = req.body;  
   
   try {
-    const followers = await Follow.getFollowers( id_user );
+    const followers = await FollowService.getFollowers( id_user );
 
     res.json({
       message: "Seguidores obtenidos exitosamente",
@@ -85,7 +69,7 @@ export const getFollowings = async (req, res) => {
   const { id_user } = req.body;  
   
   try {
-    const followings = await Follow.getFollowings( id_user );
+    const followings = await FollowService.getFollowings( id_user );
 
     res.json({
       message: "Seguidos obtenidos exitosamente",
