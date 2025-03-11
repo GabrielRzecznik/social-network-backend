@@ -17,7 +17,7 @@ class UserRepository {
       UPDATE "user"
       SET name = $2, surname = $3, email = $4, username = $5, birthdate = $6, img = $7
       WHERE id_user = $1
-      RETURNING id_user, name, surname, email, username, TO_CHAR(birthdate, 'YYYY-MM-DD') AS birthdate, img;
+      RETURNING name, surname, email, username, TO_CHAR(birthdate, 'YYYY-MM-DD') AS birthdate, img;
     `;
     const result = await pool.query(query, [id, name, surname, email, username, birthdate, img]);
     return result.rows[0] ? new User(result.rows[0]) : null;
