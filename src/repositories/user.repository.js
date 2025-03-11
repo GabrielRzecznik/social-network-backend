@@ -64,8 +64,9 @@ class UserRepository {
         u.password,
         TO_CHAR(u.birthdate, 'YYYY-MM-DD') AS birthdate,
         u.img,
-        u.status
+        s.description
       FROM "user" u
+      JOIN "user_status" s ON u.status = s.id_user_status
       WHERE email = $1 OR username = $2;
     `;
 
