@@ -24,7 +24,6 @@ class UserRepository {
   }
 
   async updateStatus(id_user, status) {
-    console.log(status)
     const query = `
       UPDATE "user" 
       SET status = $2
@@ -32,7 +31,6 @@ class UserRepository {
       RETURNING status;
     `;
     const result = await pool.query(query, [id_user, status]);
-    console.log(result.rows[0] ? new User(result.rows[0]) : null)
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
 
