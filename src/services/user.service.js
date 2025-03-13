@@ -37,7 +37,7 @@ class UserService {
     const currentUser = await this.getUserById(id_user);
 
     if (currentUser.birthdate instanceof Date) {
-      currentUser.birthdate = currentUser.birthdate.toISOString().split('T')[0]; 
+      currentUser.birthdate = currentUser.birthdate.toISOString().split('T')[0];
     }
 
     //Valida password
@@ -55,21 +55,18 @@ class UserService {
 
     if (isSameData) throw new CustomError('Usuario sin cambios', 400);
 
-    const usernameTaken = await UserRepository.findByEmailOrUsername(null, userData.username);
-    if (usernameTaken && usernameTaken.id_user !== id_user) throw new CustomError('Username no disponible', 400);
-
-    const emailTaken = await UserRepository.findByEmailOrUsername(userData.email, null);
-    if (emailTaken && emailTaken.id_user !== id_user) throw new CustomError('Email no disponible', 400);
+    // Valida email y username
+    await this.findUsersWithSameEmailOrUsername(id_user, userData.email, userData.username);
 
     return await UserRepository.updateUser(id_user, userData);
   }
 
   // Actualizar status usuario
   async updateStatus(id_user, status) {
-          const user = await this.getUserById(id_user);
-          if (user.status === status) throw new CustomError('Estado sin cambios', 400);
-          
-          return UserRepository.updateStatus(id_user, status);
+    const user = await this.getUserById(id_user);
+    if (user.status === status) throw new CustomError('Estado sin cambios', 400);
+
+    return UserRepository.updateStatus(id_user, status);
   }
 
   // Actualizar contraseña usuario
@@ -93,22 +90,19 @@ class UserService {
   async getUserById(id_user) {
     const user = await UserRepository.getUserById(id_user);
     if (!user) throw new CustomError('Usuario no encontrado', 404);
-    
+
     return user;
   }
 
   async findUsersWithSameEmailOrUsername(id_user, email, username) {
     const users = await UserRepository.findUsersWithSameEmailOrUsername(email, username);
-    
+
     let emailTaken = false;
     let usernameTaken = false;
 
-    console.log(users)
-
-
     for (const user of users) {
-        if ((user.id_user !== id_user) && (user.email === email)) emailTaken = true;
-        if ((user.id_user !== id_user) && (user.username === username)) usernameTaken = true;
+      if ((user.id_user !== id_user) && (user.email === email)) emailTaken = true;
+      if ((user.id_user !== id_user) && (user.username === username)) usernameTaken = true;
     }
 
     if (emailTaken && usernameTaken) throw new CustomError('Email y username no disponibles', 400);
@@ -119,10 +113,10 @@ class UserService {
   // Refresh token
   async refreshAccessToken(refreshToken) {
     if (!refreshToken) throw new CustomError('No hay refresh token', 400);
-  
+
     const decoded = verifyRefreshToken(refreshToken);
     const user = await this.getUserById(decoded.id_user);
-  
+
     return generateAccessToken(user);
   }
 }
