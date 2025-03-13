@@ -27,6 +27,10 @@ class MessageService {
     }
     
     async updateContentMessage(id_message, content) {
+        const message = await this.getMessageById(id_message);
+        console.log(message.content === content)
+        if (message.content === content) throw new Error('No hay cambios en el mensaje');
+
         return MessageRepository.updateContentMessage(id_message, content);
     }
 
@@ -36,6 +40,13 @@ class MessageService {
 
     async getChatMessages(id_chat) {
         return MessageRepository.getChatMessages(id_chat);
+    }
+
+    async getMessageById(id_message) {
+        const message = await MessageRepository.getMessageById(id_message);
+        if (!message) throw new Error('Mensaje no encontrado');
+        
+        return message;
     }
 }
 

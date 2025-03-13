@@ -17,7 +17,7 @@ class MessageRepository {
       UPDATE "message"
       SET content = $1, status = 3
       WHERE id_message = $2
-      RETURNING id_message, sender, receiver, content, timestamp, status;
+      RETURNING id_message, content, status;
     `;
 
     const result = await pool.query(query, [content, id_message]);
@@ -44,6 +44,16 @@ class MessageRepository {
       ORDER BY timestamp ASC;
     `;
     const result = await pool.query(query, [id_chat]);
+    return result.rows[0] ? new Message(result.rows[0]) : null;
+  }
+
+  async getMessageById(id_message) {
+    const query = `
+      SELECT id_message, sender, receiver, content, timestamp, status, id_chat
+      FROM "message"
+      WHERE id_message = $1;
+    `;
+    const result = await pool.query(query, [id_message]);
     return result.rows[0] ? new Message(result.rows[0]) : null;
   }
 }
