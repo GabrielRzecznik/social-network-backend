@@ -18,10 +18,10 @@ export const sendMessage = async (req, res) => {
   }
 };
 
-// Editar contenido de un mensaje
+// Actualizar contenido mensaje
 export const updateContentMessage = async (req, res) => {
   const { id_message, content } = req.body;
-  
+
   try {
     const updatedContentMessage = await MessageService.updateContentMessage(id_message, content);
     
@@ -31,7 +31,7 @@ export const updateContentMessage = async (req, res) => {
   }
 };
 
-//Editar status de un mensaje
+// Actualizar status mensaje
 export const updateStatusMessage = async (req, res) => {
   const { id_message, status } = req.body;
 

@@ -3,6 +3,7 @@ import MessageRepository from '../repositories/message.repository.js';
 import { getCurrentTimestamp } from '../utils/timesstampUtils.js';
 
 class MessageService {
+    // Enviar mensaje
     async sendMessage(
         sender, 
         receiver, 
@@ -27,6 +28,7 @@ class MessageService {
         );
     }
     
+    // Actualizar contenido mensaje
     async updateContentMessage(id_message, content) {
         const message = await this.getMessageById(id_message);
         if (message.content === content) throw new Error('No hay cambios en el mensaje');
@@ -34,14 +36,17 @@ class MessageService {
         return MessageRepository.updateContentMessage(id_message, content);
     }
 
+    // Actualizar status mensaje
     async updateStatusMessage(id_message, status) {
         return MessageRepository.updateStatusMessage(id_message, status);
     }
 
+    // Obtener mensajes chat
     async getChatMessages(id_chat) {
         return MessageRepository.getChatMessages(id_chat);
     }
 
+    // Obtener mensaje por id
     async getMessageById(id_message) {
         const message = await MessageRepository.getMessageById(id_message);
         if (!message) throw new Error('Mensaje no encontrado');
