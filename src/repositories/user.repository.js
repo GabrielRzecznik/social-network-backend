@@ -50,6 +50,8 @@ class UserRepository {
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
 
+  
+
   async findByEmailOrUsername(email, username) {
     const query = `
       SELECT
