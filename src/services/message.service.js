@@ -6,9 +6,10 @@ class MessageService {
         sender, 
         receiver, 
         content, 
-        timestamp, 
-        status
+        timestamp
     ) {
+        const status = 1;
+        
         // Verificar si el chat ya existe entre los dos usuarios
         let chat = await ChatRepository.findChatByUsers(sender, receiver);
         if (!chat) {

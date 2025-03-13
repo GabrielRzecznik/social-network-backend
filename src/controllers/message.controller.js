@@ -5,15 +5,13 @@ import { getCurrentTimestamp } from '../utils/timesstampUtils.js';
 export const sendMessage = async (req, res) => {
   const { sender, receiver, content } = req.body;
   const timestamp = getCurrentTimestamp();
-  const status = 1;
 
   try {
     const newMessage = await MessageService.sendMessage(
       sender, 
       receiver,
       content, 
-      timestamp, 
-      status
+      timestamp
     );
 
     res.status(201).json({ message: 'Mensaje enviado exitosamente', message: newMessage });
