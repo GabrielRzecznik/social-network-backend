@@ -27,11 +27,10 @@ class MessageRepository {
   async updateStatusMessage(id_message, status) {
     const query = `
       UPDATE "message"
-      SET status_message = $2
+      SET status = $2
       WHERE id_message = $1
-      RETURNING id_message, sender, receiver, content, timestamp, status;
+      RETURNING id_message, status;
     `;
-
     const result = await pool.query(query, [id_message, status]);
     return result.rows[0] ? new Message(result.rows[0]) : null;
   }

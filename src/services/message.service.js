@@ -31,13 +31,16 @@ class MessageService {
     // Actualizar contenido mensaje
     async updateContentMessage(id_message, content) {
         const message = await this.getMessageById(id_message);
-        if (message.content === content) throw new Error('No hay cambios en el mensaje');
+        if (message.content === content) throw new Error('Mensaje sin cambios');
 
         return MessageRepository.updateContentMessage(id_message, content);
     }
 
     // Actualizar status mensaje
     async updateStatusMessage(id_message, status) {
+        const message = await this.getMessageById(id_message);
+        if (message.status === status) throw new Error('Estado sin cambios');
+
         return MessageRepository.updateStatusMessage(id_message, status);
     }
 
