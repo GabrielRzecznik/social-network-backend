@@ -1,6 +1,7 @@
 import ChatRepository from '../repositories/chat.repository.js';
 import MessageRepository from '../repositories/message.repository.js';
-import { getCurrentTimestamp } from '../utils/timesstampUtils.js';
+import CustomError from '../utils/customError.util.js';
+import { getCurrentTimestamp } from '../utils/timesStamp.util.js';
 
 class MessageService {
     // Enviar mensaje
@@ -31,7 +32,7 @@ class MessageService {
     // Actualizar contenido mensaje
     async updateContentMessage(id_message, content) {
         const message = await this.getMessageById(id_message);
-        if (message.content === content) throw new Error('Mensaje sin cambios');
+        if (message.content === content) throw new CustomError('Mensaje sin cambios', 400);
 
         return MessageRepository.updateContentMessage(id_message, content);
     }
@@ -39,7 +40,7 @@ class MessageService {
     // Actualizar status mensaje
     async updateStatusMessage(id_message, status) {
         const message = await this.getMessageById(id_message);
-        if (message.status === status) throw new Error('Estado sin cambios');
+        if (message.status === status) throw new CustomError('Estado sin cambios', 400);
 
         return MessageRepository.updateStatusMessage(id_message, status);
     }
@@ -52,7 +53,7 @@ class MessageService {
     // Obtener mensaje por id
     async getMessageById(id_message) {
         const message = await MessageRepository.getMessageById(id_message);
-        if (!message) throw new Error('Mensaje no encontrado');
+        if (!message) throw new CustomError('Mensaje no encontrado', 404);
         
         return message;
     }

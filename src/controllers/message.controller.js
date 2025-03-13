@@ -7,14 +7,14 @@ export const sendMessage = async (req, res) => {
 
   try {
     const newMessage = await MessageService.sendMessage(
-      sender, 
+      sender,
       receiver,
       content
     );
 
     res.status(201).json({ message: 'Mensaje enviado exitosamente', message: newMessage });
   } catch (error) {
-    res.status(500).json({ message: 'Error interno del servidor' });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
 
@@ -24,10 +24,10 @@ export const updateContentMessage = async (req, res) => {
 
   try {
     const updatedContentMessage = await MessageService.updateContentMessage(id_message, content);
-    
+
     res.status(200).json({ message: 'Mensaje actualizado exitosamente', message: updatedContentMessage });
   } catch (error) {
-      res.status(400).json({ message: error.message });;
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
 
@@ -40,6 +40,6 @@ export const updateStatusMessage = async (req, res) => {
 
     res.status(200).json({ message: 'Estado del mensaje actualizado exitosamente', message: updatedStatusMessage });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
