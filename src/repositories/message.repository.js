@@ -6,7 +6,7 @@ class MessageRepository {
     const query = `
       INSERT INTO "message" (sender, receiver, content, timestamp, status, id_chat)
       VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id_message, sender, receiver, content, timestamp, status, id_chat;
+      RETURNING id_message, sender, receiver, content, TO_CHAR(timestamp, 'YYYY-MM-DD HH24:MI:SS') AS timestamp, status, id_chat;
     `;
     const result = await pool.query(query, [sender, receiver, content, timestamp, status, id_chat]);
     return new Message(result.rows[0]);
