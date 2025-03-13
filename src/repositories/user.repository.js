@@ -50,7 +50,18 @@ class UserRepository {
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
 
-  
+  async findUsersWithSameEmailOrUsername(email, username) {
+    const query = `
+      SELECT
+        u.id_user,
+        u.email,
+        u.username
+        FROM "user" u
+      WHERE email = $1 OR username = $2;
+    `;
+    const result = await pool.query(query, [email, username]);
+    return result.rows.length > 0 ? result.rows.map(row => new User(row)) : [];
+  }
 
   async findByEmailOrUsername(email, username) {
     const query = `
@@ -67,9 +78,7 @@ class UserRepository {
       FROM "user" u
       WHERE email = $1 OR username = $2;
     `;
-
     const result = await pool.query(query, [email, username]);
-
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
 }

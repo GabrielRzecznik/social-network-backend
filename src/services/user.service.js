@@ -12,11 +12,7 @@ class UserService {
 
     const { email, username } = userData;
 
-    const usernameTaken = await UserRepository.findByEmailOrUsername(null, username);
-    if (usernameTaken) throw new CustomError('Username no disponible', 400);
-
-    const emailTaken = await UserRepository.findByEmailOrUsername(email, null);
-    if (emailTaken) throw new CustomError('Email no disponible', 400);
+    await this.findUsersWithSameEmailOrUsername(null, email, username);
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     return UserRepository.registerUser({ ...userData, password: hashedPassword });
@@ -99,6 +95,25 @@ class UserService {
     if (!user) throw new CustomError('Usuario no encontrado', 404);
     
     return user;
+  }
+
+  async findUsersWithSameEmailOrUsername(id_user, email, username) {
+    const users = await UserRepository.findUsersWithSameEmailOrUsername(email, username);
+    
+    let emailTaken = false;
+    let usernameTaken = false;
+
+    console.log(users)
+
+
+    for (const user of users) {
+        if ((user.id_user !== id_user) && (user.email === email)) emailTaken = true;
+        if ((user.id_user !== id_user) && (user.username === username)) usernameTaken = true;
+    }
+
+    if (emailTaken && usernameTaken) throw new CustomError('Email y username no disponibles', 400);
+    if (emailTaken) throw new CustomError('Email no disponible', 400);
+    if (usernameTaken) throw new CustomError('Username no disponible', 400);
   }
 
   // Refresh token
