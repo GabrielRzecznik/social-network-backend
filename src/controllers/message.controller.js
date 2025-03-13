@@ -1,17 +1,15 @@
 import MessageService from '../services/message.service.js';
-import { getCurrentTimestamp } from '../utils/timesstampUtils.js';
 
 // Enviar mesanje
 export const sendMessage = async (req, res) => {
-  const { sender, receiver, content } = req.body;
-  const timestamp = getCurrentTimestamp();
+  const sender = req.user.id_user;
+  const { receiver, content } = req.body;
 
   try {
     const newMessage = await MessageService.sendMessage(
       sender, 
       receiver,
-      content, 
-      timestamp
+      content
     );
 
     res.status(201).json({ message: 'Mensaje enviado exitosamente', message: newMessage });

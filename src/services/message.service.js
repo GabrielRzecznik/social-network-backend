@@ -1,16 +1,17 @@
 import ChatRepository from '../repositories/chat.repository.js';
 import MessageRepository from '../repositories/message.repository.js';
+import { getCurrentTimestamp } from '../utils/timesstampUtils.js';
 
 class MessageService {
     async sendMessage(
         sender, 
         receiver, 
-        content, 
-        timestamp
+        content 
     ) {
         const status = 1;
+        const timestamp = getCurrentTimestamp();
         
-        // Verificar si el chat ya existe entre los dos usuarios
+        // Verificar existencia chat entre usuarios
         let chat = await ChatRepository.findChatByUsers(sender, receiver);
         if (!chat) {
             chat = await ChatRepository.createChat(sender, receiver);
