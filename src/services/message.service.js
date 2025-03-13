@@ -28,13 +28,12 @@ class MessageService {
     
     async updateContentMessage(id_message, content) {
         const message = await this.getMessageById(id_message);
-        console.log(message.content === content)
         if (message.content === content) throw new Error('No hay cambios en el mensaje');
 
         return MessageRepository.updateContentMessage(id_message, content);
     }
 
-    async updateStatusMessage(id_message, status_message) {
+    async updateStatusMessage(id_message, status) {
         return MessageRepository.updateStatusMessage(id_message, status);
     }
 
