@@ -6,7 +6,7 @@ class FollowService {
         
         if (follow && follow.status === 0) {
             const id_follow = follow.id_follow;
-            const result = this.toggleStatusFollow(id_follow, 1);
+            const result = this.updateStatusFollow(id_follow, 1);
             
             return res.status(200).json({ message: 'Follow reactivado exitosamente', follow: result });
         }else if (follow && follow.status === 1) {
@@ -20,18 +20,14 @@ class FollowService {
         return FollowRepository.findFollowId(id_user1, id_user2);
     }
 
-    async statusFollow(id_follow, status) {
+    async updateStatusFollow(id_follow, status) {
         const follow = await this.getFollowById(id_follow);
 
         if (follow.status !== status) {
-            return this.toggleStatusFollow(id_follow, status);
+            return FollowRepository.updateStatusFollow(id_follow, status);
         }else {
             return res.status(500).json({ message: 'Follow sin modificaciones' });
         }
-    }
-
-    async toggleStatusFollow(id_follow, status){
-        return FollowRepository.toggleStatusFollow(id_follow, status);
     }
 
     async getFollowById(id_follow) {
