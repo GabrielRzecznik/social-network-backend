@@ -30,10 +30,10 @@ export const updateStatusFollow = async (req, res) => {
 
 // Obtener cantidad de follows
 export const getFollowsCount = async (req, res) => {
-  const { id_user } = req.body;  
+  const id_user = req.user.id_user;
   
   try {
-    const followStats = await FollowService.getFollowsCount( id_user );
+    const followStats = await FollowService.getFollowsCount(id_user);
 
     res.json({
       message: "Follows obtenidos exitosamente",
