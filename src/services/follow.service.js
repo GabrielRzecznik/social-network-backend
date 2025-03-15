@@ -30,7 +30,7 @@ class FollowService {
 
     async getFollowById(id_follow) {
         const follow = await FollowRepository.getFollowById(id_follow);
-        if (!follow) return res.status(404).json({ message: 'Follow no encontrado' });
+        if (!follow) throw new CustomError('Follow no encontrado', 400);
         return follow;
     }
 
