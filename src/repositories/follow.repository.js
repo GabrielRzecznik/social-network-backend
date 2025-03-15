@@ -21,7 +21,7 @@ class FollowRepository {
   }
 
   // Modificar status follow
-  async toggleStatusFollow(id_follow, status) {
+  async updateStatusFollow(id_follow, status) {
     const query = `
       UPDATE "follow"
       SET status = $2

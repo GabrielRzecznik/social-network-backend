@@ -16,16 +16,15 @@ export const addFollow = async (req, res) => {
 // Actualizar status follow
 export const updateStatusFollow = async (req, res) => {
   const { id_follow, status } = req.body;
-  
   try {
-    const follow = await FollowService.toggleFollow(id_follow, status);
-
+    const follow = await FollowService.updateStatusFollow(id_follow, status);
+    console.log("Hola", follow);
     res.json({
       message: "Follow revocado exitosamente",
       follow: follow
     });
   } catch (error) {
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
 

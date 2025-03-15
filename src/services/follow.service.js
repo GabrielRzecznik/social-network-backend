@@ -24,20 +24,14 @@ class FollowService {
 
     async updateStatusFollow(id_follow, status) {
         const follow = await this.getFollowById(id_follow);
-
-        if (follow.status !== status) {
-            return FollowRepository.updateStatusFollow(id_follow, status);
-        }else {
-            return res.status(500).json({ message: 'Follow sin modificaciones' });
-        }
+        if (follow.status !== status) return FollowRepository.updateStatusFollow(id_follow, status);
+        else throw new CustomError('Follow sin cambios', 400);
     }
 
     async getFollowById(id_follow) {
         const follow = await FollowRepository.getFollowById(id_follow);
-
-        if (!follow) {
-            return res.status(404).json({ message: 'Follow no encontrado' });
-        }
+        if (!follow) return res.status(404).json({ message: 'Follow no encontrado' });
+        return follow;
     }
 
     async getFollowsCount(id_user) {
