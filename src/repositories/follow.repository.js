@@ -3,25 +3,25 @@ import Follow from '../models/follow.model.js';
 
 class FollowRepository {
   // Seguir usuario
-  static async addFollow(id_user_1, id_user_2) {
+  async addFollow(id_user1, id_user2) {
     const query = `
       INSERT INTO "follow" (follower, following)
       VALUES ($1, $2)
-      RETURNING id_follow, follower, following, status_follow;
+      RETURNING id_follow, follower, following, status;
     `;
-    const result = await pool.query(query, [id_user_1, id_user_2]);
+    const result = await pool.query(query, [id_user1, id_user2]);
     return new Follow(result.rows[0]);
   }
 
   // Obtener id_follow
-  static async findFollowId(id_user_1, id_user_2) {
+  async findFollowId(id_user1, id_user2) {
     const query = `SELECT * FROM "follow" WHERE follower = $1 AND following = $2;`;
-    const result = await pool.query(query, [id_user_1, id_user_2]);
+    const result = await pool.query(query, [id_user1, id_user2]);
     return result.rows[0] ? new Follow(result.rows[0]) : null;
   }
 
   // Modificar status follow
-  static async toggleStatusFollow(id_follow, status) {
+  async toggleStatusFollow(id_follow, status) {
     const query = `
       UPDATE "follow"
       SET status = $2
@@ -33,14 +33,14 @@ class FollowRepository {
   }
 
   // Obtener follow por id
-  static async getFollowById(id_follow) {
+  async getFollowById(id_follow) {
     const query = `SELECT * FROM "follow" WHERE id_follow = $1;`;
     const result = await pool.query(query, [id_follow]);
     return result.rows[0] ? new Follow(result.rows[0]) : null;
   }
 
   // Obtener cantidad de follows
-  static async getFollowsCount(id_user) {
+  async getFollowsCount(id_user) {
     const query = `
       SELECT
         COUNT(CASE WHEN follower = $1 THEN 1 END) AS followers,
@@ -52,7 +52,7 @@ class FollowRepository {
   }
 
   // Obtener seguidores
-  static async getFollowers(id_user) {
+  async getFollowers(id_user) {
     const query = `
       SELECT
         u.id_user,
@@ -68,7 +68,7 @@ class FollowRepository {
   }
 
   // Obtener seguidos
-  static async getFollowings(id_user) {
+  async getFollowings(id_user) {
     const query = `
       SELECT
         u.id_user,

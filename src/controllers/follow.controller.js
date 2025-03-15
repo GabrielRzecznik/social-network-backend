@@ -2,17 +2,14 @@ import FollowService from '../services/follow.service.js';
 
 // Seguir un usuario
 export const addFollow = async (req, res) => {
-  const id_user_1 = req.user.id_user;
-  const { id_user_2 } = req.body;
+  const id_user1 = req.user.id_user;
+  const { id_user2 } = req.body;
 
   try {
-    await FollowService.findFollowId(id_user_1, id_user_2);
-    
-    const newFollow = await FollowService.addFollow(id_user_1, id_user_2);
-    
+    const newFollow = await FollowService.addFollow(id_user1, id_user2);
     res.status(201).json({ message: "Follow creado exitosamente", follow: newFollow });
   } catch (error) {
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
 
