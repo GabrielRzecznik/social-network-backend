@@ -10,7 +10,7 @@ class FollowService {
             
             return res.status(200).json({ message: 'Follow reactivado exitosamente', follow: result });
         }else if (follow && follow.status === 1) {
-            return res.status(500).json({ message: 'El usuario ya sigues al otro usuario' });
+            throw new CustomError('El usuario ya sigues al otro usuario', 400);
         }
         
         return FollowRepository.addFollow(id_user1, id_user2);
@@ -30,7 +30,7 @@ class FollowService {
 
     async getFollowById(id_follow) {
         const follow = await FollowRepository.getFollowById(id_follow);
-        if (!follow) throw new CustomError('Follow no encontrado', 400);
+        if (!follow) throw new CustomError('Follow no encontrado', 404);
         return follow;
     }
 
