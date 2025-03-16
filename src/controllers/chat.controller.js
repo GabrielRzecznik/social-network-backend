@@ -4,11 +4,11 @@ import MessageService from '../services/message.service.js';
 export const getListChats = async (req, res) => {
   const id_user = req.user.id_user;
   try {
-    const chats = await ChatService.getUserChats(id_user);
+    const chats = await ChatService.getListChats(id_user);
     res.status(200).json({message: 'Publicación creada exitosamente', chats: chats});
   } catch (error) {
     console.error('Error en getUserChats:', error);
-    res.status(500).json({ message: 'Error interno del servidor' });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
 
@@ -16,10 +16,11 @@ export const getChatMessages = async (req, res) => {
   const id_user = req.user.id_user;
   const { id_chat } = req.params;
   try {
+    await ChatService.getChat(id_chat);
     const messages = await MessageService.getChatMessages(id_user, id_chat);
     res.status(200).json({ messages });
   } catch (error) {
-    res.status(500).json({ message: 'Error interno del servidor' });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
 
