@@ -49,7 +49,7 @@ export const getFollowers = async (req, res) => {
   const id_user = req.user.id_user; 
   
   try {
-    const followers = await FollowService.getFollowers( id_user );
+    const followers = await FollowService.getFollowers(id_user);
     
     res.json({
       message: "Seguidores obtenidos exitosamente",
@@ -62,10 +62,10 @@ export const getFollowers = async (req, res) => {
 
 // Obtener seguidos
 export const getFollowings = async (req, res) => {
-  const { id_user } = req.body;  
+  const id_user = req.user.id_user;  
   
   try {
-    const followings = await FollowService.getFollowings( id_user );
+    const followings = await FollowService.getFollowings(id_user);
 
     res.json({
       message: "Seguidos obtenidos exitosamente",
