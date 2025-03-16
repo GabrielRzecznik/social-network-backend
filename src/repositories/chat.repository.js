@@ -22,7 +22,7 @@ class ChatRepository {
     return new Chat(result.rows[0]);
   }
   
-  async getUserChats(id_user) {
+  async getListChats(id_user) {
     const query = `
       SELECT * FROM "chat"
       WHERE id_user1 = $1 OR id_user2 = $1;

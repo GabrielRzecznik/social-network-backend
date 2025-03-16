@@ -1,7 +1,7 @@
 import ChatService from '../services/chat.service.js';
 import MessageService from '../services/message.service.js';
 
-export const getUserChats = async (req, res) => {
+export const getListChats = async (req, res) => {
   const id_user = req.user.id_user;
   try {
     const chats = await ChatService.getUserChats(id_user);
