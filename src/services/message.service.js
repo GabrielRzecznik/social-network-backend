@@ -46,8 +46,8 @@ class MessageService {
     }
 
     // Obtener mensajes chat
-    async getChatMessages(id_chat) {
-        return MessageRepository.getChatMessages(id_chat);
+    async getChatMessages(id_user, id_chat) {
+        return MessageRepository.getChatMessages(id_user, id_chat);
     }
 
     // Obtener mensaje por id

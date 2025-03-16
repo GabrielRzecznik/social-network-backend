@@ -35,15 +35,17 @@ class MessageRepository {
     return result.rows[0] ? new Message(result.rows[0]) : null;
   }
 
-  async getChatContentMessages(id_chat) {
+  async getChatMessages(id_user, id_chat) {
     const query = `
       SELECT id_message, sender, receiver, content, timestamp, status
       FROM "message"
-      WHERE id_chat = $1 AND status <> 0
+      WHERE id_chat = $2 
+      AND status <> 0 
+      AND $1 IN (sender, receiver)
       ORDER BY timestamp ASC;
     `;
-    const result = await pool.query(query, [id_chat]);
-    return result.rows[0] ? new Message(result.rows[0]) : null;
+    const result = await pool.query(query, [id_user, id_chat]);
+    return result.rows;
   }
 
   async getMessageById(id_message) {
