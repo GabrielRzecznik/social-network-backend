@@ -7,13 +7,15 @@ class ChatService {
     
     async updateChat(id_chat, status) {
         const chat = await this.getChat(id_chat);
-        if (chat.status_chat === status) throw new Error('Estado sin cambios');
+        console.log(chat)
+        if (chat.status === status) throw new Error('Estado sin cambios');
         return ChatRepository.updateChat(id_chat, status);
     }
 
     async getChat(id_chat) {
         const chat = await ChatRepository.getChat(id_chat);
         if (!chat) throw new Error('Chat no encontrado');
+        return chat;
     }
 }
 
