@@ -28,7 +28,7 @@ class ChatRepository {
       WHERE id_user1 = $1 OR id_user2 = $1;
     `;
     const result = await pool.query(query, [id_user]);
-    return result.rows[0] ? new Chat(result.rows[0]) : null;
+    return result.rows;
   }
 
   async updateChat(id_chat, status) {
