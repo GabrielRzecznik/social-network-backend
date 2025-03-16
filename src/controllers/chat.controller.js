@@ -31,7 +31,7 @@ export const updateChat = async (req, res) => {
     const chat = await ChatService.updateChat(id_chat, status);
     res.json({ message: 'Chat actualizado exitosamente', chat: chat });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
 

@@ -1,4 +1,5 @@
 import ChatRepository from '../repositories/chat.repository.js';
+import CustomError from '../utils/customError.util.js';
 
 class ChatService {
     async getListChats(id_user) {
@@ -7,14 +8,13 @@ class ChatService {
     
     async updateChat(id_chat, status) {
         const chat = await this.getChat(id_chat);
-        console.log(chat)
-        if (chat.status === status) throw new Error('Estado sin cambios');
+        if (chat.status === status) throw new CustomError('Estado sin cambios', 400);
         return ChatRepository.updateChat(id_chat, status);
     }
 
     async getChat(id_chat) {
         const chat = await ChatRepository.getChat(id_chat);
-        if (!chat) throw new Error('Chat no encontrado');
+        if (!chat) throw new CustomError('Chat no encontrado', 404);
         return chat;
     }
 }
