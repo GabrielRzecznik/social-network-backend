@@ -58,10 +58,10 @@ class FollowRepository {
         u.id_user,
         u.username,
         u.email,
-        u.img_user
+        u.img
       FROM "follow" f
       JOIN "user" u ON f.follower = u.id_user
-      WHERE f.following = $1 AND f.status_follow = true;
+      WHERE f.following = $1 AND f.status = 1;
     `;
     const result = await pool.query(query, [id_user]);
     return result.rows;
