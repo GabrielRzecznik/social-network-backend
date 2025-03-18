@@ -64,7 +64,7 @@ class UserService {
   // Actualizar status usuario
   async updateStatus(id_user, status) {
     const user = await this.getUserById(id_user);
-    if (user.status === status) throw new CustomError('Estado sin cambios', 400);
+    if (user.status === status) throw new CustomError('Estado usuario sin cambios', 400);
 
     return UserRepository.updateStatus(id_user, status);
   }

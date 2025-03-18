@@ -40,7 +40,7 @@ class MessageService {
     // Actualizar status mensaje
     async updateStatusMessage(id_message, status) {
         const message = await this.getMessageById(id_message);
-        if (message.status === status) throw new CustomError('Estado sin cambios', 400);
+        if (message.status === status) throw new CustomError('Estado mensaje sin cambios', 400);
 
         return MessageRepository.updateStatusMessage(id_message, status);
     }

@@ -25,7 +25,7 @@ class FollowService {
     async updateStatusFollow(id_follow, status) {
         const follow = await this.getFollowById(id_follow);
         if (follow.status !== status) return FollowRepository.updateStatusFollow(id_follow, status);
-        else throw new CustomError('Follow sin cambios', 400);
+        else throw new CustomError('Estado follow sin cambios', 400);
     }
 
     async getFollowById(id_follow) {

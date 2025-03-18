@@ -7,8 +7,7 @@ class PostService {
     }
 
     async updatePost(id_post, content, img) {
-        const post = await PostRepository.getPostById(id_post);
-        if (!post) throw new CustomError('Post no encontrado', 404);
+        const post = await this.getPostById(id_post);
         if (
             post.content === content &&
             post.img === img
@@ -22,11 +21,16 @@ class PostService {
     }
 
     async updateStatusPost(id_post, status) {
-        const post = await PostRepository.getPostById(id_post);
-        if (!post) throw new CustomError('Post no encontrado', 404);
-        if (post.status === status) throw new CustomError('Estado sin cambios', 400);
+        const post = await this.getPostById(id_post);
+        if (post.status === status) throw new CustomError('Estado post sin cambios', 400);
 
         return PostRepository.updateStatusPost(id_post, status);
+    }
+
+    async getPostById(id_post) {
+        const post = await PostRepository.getPostById(id_post);
+        if (!post) throw new CustomError('Post no encontrado', 404);
+        return post;
     }
 }
 

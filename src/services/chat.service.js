@@ -8,7 +8,7 @@ class ChatService {
     
     async updateChat(id_chat, status) {
         const chat = await this.getChat(id_chat);
-        if (chat.status === status) throw new CustomError('Estado sin cambios', 400);
+        if (chat.status === status) throw new CustomError('Estado chat sin cambios', 400);
         return ChatRepository.updateChat(id_chat, status);
     }
 
