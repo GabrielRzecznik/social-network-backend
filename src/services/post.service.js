@@ -7,11 +7,11 @@ class PostService {
     }
 
     async updatePost(id_post, content, img) {
-        const postData = await PostRepository.getPostById(id_post);
-
+        const post = await PostRepository.getPostById(id_post);
+        if (!post) throw new CustomError('Post no encontrado', 404);
         if (
-            postData.content === content &&
-            postData.img === img
+            post.content === content &&
+            post.img === img
         ) {
             throw new CustomError('Post sin cambios', 400);
         }
