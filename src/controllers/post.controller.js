@@ -22,7 +22,7 @@ export const updatePost = async (req, res) => {
 
     res.json({ message: 'Post actualizado exitosamente', post: updatedPost });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
 
@@ -38,6 +38,6 @@ export const updateStatusPost = async (req, res) => {
       post: updatedStatusPost
     });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };

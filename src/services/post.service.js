@@ -1,4 +1,5 @@
 import PostRepository from '../repositories/post.repository.js';
+import CustomError from '../utils/customError.util.js';
 
 class PostService {
     async createPost(id_user, content, img) {
@@ -12,7 +13,7 @@ class PostService {
             postData.content === content &&
             postData.img === img
         ) {
-            throw new Error('No se realizaron cambios');
+            throw new CustomError('Post sin cambios', 400);
         }
 
         return PostRepository.updatePost(id_post, {
@@ -22,8 +23,8 @@ class PostService {
 
     async updateStatusPost(id_post, status) {
         const post = await PostRepository.getPostById(id_post);
-        if (!post) throw new Error('Post no encontrado');
-        if (post.status === status) throw new Error('El estado ya está actualizado');
+        if (!post) throw new CustomError('Post no encontrado', 404);
+        if (post.status === status) throw new CustomError('Estado sin cambios', 400);
 
         return PostRepository.updateStatusPost(id_post, status);
     }
