@@ -6,11 +6,17 @@ import FollowRoutes from './routes/follow.routes.js';
 import MessageRoutes from './routes/message.routes.js';
 import ChatRoutes from './routes/chat.routes.js';
 import CommentRoutes from './routes/comment.routes.js';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+
+app.use(cors({
+  origin: 'http://localhost:4200',
+  credentials: true
+}));
 
 app.get('/', (req, res) => {
   res.send('Servidor funcionando correctamente 🚀');
