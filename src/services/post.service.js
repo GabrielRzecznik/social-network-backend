@@ -32,6 +32,18 @@ class PostService {
         if (!post) throw new CustomError('Post no encontrado', 404);
         return post;
     }
+
+    async getPostsByUser(id_user) {
+        const posts = await PostRepository.getPostsByUser(id_user);
+        if (!posts) throw new CustomError('Posts no encontrados', 404);
+        return posts;
+    }
+
+    async getFeedPosts(id_user) {
+        const posts = await PostRepository.getFeedPosts(id_user);
+        if (!posts) throw new CustomError('Feed posts no encontrados', 404);
+        return posts;
+    }
 }
 
 export default new PostService();

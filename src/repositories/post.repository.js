@@ -43,6 +43,26 @@ class PostRepository {
     const result = await pool.query(query, [id_post, status]);
     return new Post(result.rows[0]);
   }
+
+  async getPostsByUser(id_user) {
+    const query = `
+      SELECT * FROM "post"
+      WHERE id_user = $1
+    `;
+    const result = await pool.query(query, [id_user]);
+    return result.rows;
+  }
+
+  async getFeedPosts(id_user) {
+    const query = `
+      SELECT p.*
+      FROM post p
+      JOIN follow f ON p.id_user = f.following
+      WHERE f.follower = $1 AND p.status <> 0;
+    `;
+    const result = await pool.query(query, [id_user]);
+    return result.rows;
+  }
 }
 
 export default new PostRepository();
