@@ -47,9 +47,9 @@ export const updateStatusPost = async (req, res) => {
 export const getPostsByUser = async (req, res) => { 
   const { username } = req.params;
 
-  const user = await userService.getUserByUsername(username);
-  
   try {
+    const user = await userService.getUserByUsername(username);
+    
     const posts = await PostService.getPostsByUser(user.id_user);
     
     res.json({
@@ -57,7 +57,7 @@ export const getPostsByUser = async (req, res) => {
       posts: posts
     });
   } catch (error) {
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
 
