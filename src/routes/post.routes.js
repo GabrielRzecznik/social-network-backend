@@ -8,6 +8,6 @@ router.post('/create', protectRoute, createPost);
 router.put('/update', protectRoute, updatePost);
 router.patch('/status', protectRoute, updateStatusPost);
 router.get('/feed', protectRoute, getFeedPosts);
-router.get('/:id_user', protectRoute, getPostsByUser);
+router.get('/:username', protectRoute, getPostsByUser);
 
 export default router;

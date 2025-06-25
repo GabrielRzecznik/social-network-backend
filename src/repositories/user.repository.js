@@ -44,9 +44,15 @@ class UserRepository {
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
 
-  async getUserById(id) {
+  async getUserById(id_user) {
     const query = `SELECT * FROM "user" WHERE id_user = $1;`;
-    const result = await pool.query(query, [id]);
+    const result = await pool.query(query, [id_user]);
+    return result.rows[0] ? new User(result.rows[0]) : null;
+  }
+
+  async getUserByUsername(username) {
+    const query = `SELECT * FROM "user" WHERE username = $1;`;
+    const result = await pool.query(query, [username]);
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
 

@@ -94,6 +94,14 @@ class UserService {
     return user;
   }
 
+  // Obtener usuario por username
+  async getUserByUsername(username) {
+    const user = await UserRepository.getUserByUsername(username);
+    if (!user) throw new CustomError('Usuario no encontrado', 404);
+
+    return user;
+  }
+
   async findUsersWithSameEmailOrUsername(id_user, email, username) {
     const users = await UserRepository.findUsersWithSameEmailOrUsername(email, username);
 

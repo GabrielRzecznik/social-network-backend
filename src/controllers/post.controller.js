@@ -1,4 +1,5 @@
 import PostService from '../services/post.service.js';
+import userService from '../services/user.service.js';
 
 // Crear post
 export const createPost = async (req, res) => {
@@ -44,10 +45,12 @@ export const updateStatusPost = async (req, res) => {
 
 // Obtener post de un usuario
 export const getPostsByUser = async (req, res) => { 
-  const { id_user } = req.params;
+  const { username } = req.params;
 
+  const user = await userService.getUserByUsername(username);
+  
   try {
-    const posts = await PostService.getPostsByUser(id_user);
+    const posts = await PostService.getPostsByUser(user.id_user);
     
     res.json({
       message: "Posts obtenidos exitosamente",
@@ -61,7 +64,7 @@ export const getPostsByUser = async (req, res) => {
 // Obtener post de usuarios seguidos
 export const getFeedPosts = async (req, res) => {
   const id_user = req.user.id_user; 
-  console.log(id_user)
+
   try {
     const posts = await PostService.getFeedPosts(id_user);
     
