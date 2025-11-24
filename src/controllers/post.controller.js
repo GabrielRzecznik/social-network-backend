@@ -1,5 +1,5 @@
 import PostService from '../services/post.service.js';
-import userService from '../services/user.service.js';
+import UserService from '../services/user.service.js';
 
 // Crear post
 export const createPost = async (req, res) => {
@@ -48,7 +48,7 @@ export const getPostsByUser = async (req, res) => {
   const { username } = req.params;
 
   try {
-    const user = await userService.getUserByUsername(username);
+    const user = await UserService.getUserByUsername(username);
     
     const posts = await PostService.getPostsByUser(user.id_user);
     

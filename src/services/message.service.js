@@ -1,5 +1,5 @@
-import ChatRepository from '../repositories/chat.repository.js';
-import MessageRepository from '../repositories/message.repository.js';
+import ChatModel from '../models/chat.model.js';
+import MessageModel from '../models/message.model.js';
 import CustomError from '../utils/customError.util.js';
 import { getCurrentTimestamp } from '../utils/timesStamp.util.js';
 
@@ -14,12 +14,12 @@ class MessageService {
         const timestamp = getCurrentTimestamp();
         
         // Verificar existencia chat entre usuarios
-        let chat = await ChatRepository.findChatByUsers(sender, receiver);
+        let chat = await ChatModel.findChatByUsers(sender, receiver);
         if (!chat) {
-            chat = await ChatRepository.createChat(sender, receiver);
+            chat = await ChatModel.createChat(sender, receiver);
         }
 
-        return MessageRepository.sendMessage(
+        return MessageModel.sendMessage(
             sender, 
             receiver, 
             content, 
@@ -34,7 +34,7 @@ class MessageService {
         const message = await this.getMessageById(id_message);
         if (message.content === content) throw new CustomError('Mensaje sin cambios', 400);
 
-        return MessageRepository.updateContentMessage(id_message, content);
+        return MessageModel.updateContentMessage(id_message, content);
     }
 
     // Actualizar status mensaje
@@ -42,17 +42,17 @@ class MessageService {
         const message = await this.getMessageById(id_message);
         if (message.status === status) throw new CustomError('Estado mensaje sin cambios', 400);
 
-        return MessageRepository.updateStatusMessage(id_message, status);
+        return MessageModel.updateStatusMessage(id_message, status);
     }
 
     // Obtener mensajes chat
     async getChatMessages(id_user, id_chat) {
-        return MessageRepository.getChatMessages(id_user, id_chat);
+        return MessageModel.getChatMessages(id_user, id_chat);
     }
 
     // Obtener mensaje por id
     async getMessageById(id_message) {
-        const message = await MessageRepository.getMessageById(id_message);
+        const message = await MessageModel.getMessageById(id_message);
         if (!message) throw new CustomError('Mensaje no encontrado', 404);
         
         return message;

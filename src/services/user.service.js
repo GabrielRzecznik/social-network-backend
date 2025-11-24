@@ -1,5 +1,5 @@
 import { userDataSchema } from '../validators/user.validator.js';
-import UserRepository from '../repositories/user.repository.js';
+import UserModel from '../models/user.model.js';
 import CustomError from '../utils/customError.util.js';
 import { generateAccessToken, verifyRefreshToken } from '../services/auth.service.js';
 import bcrypt from 'bcryptjs';
@@ -15,12 +15,12 @@ class UserService {
     await this.findUsersWithSameEmailOrUsername(null, email, username);
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
-    return UserRepository.registerUser({ ...userData, password: hashedPassword });
+    return UserModel.registerUser({ ...userData, password: hashedPassword });
   }
 
   // Iniciar sesión
   async loginUser(email, username, password) {
-    const user = await UserRepository.findByEmailOrUsername(email, username);
+    const user = await UserModel.findByEmailOrUsername(email, username);
     if (!user) throw new CustomError('Usuario no encontrado', 404);
 
     const validPassword = await bcrypt.compare(password, user.password);
@@ -58,7 +58,7 @@ class UserService {
     // Valida email y username
     await this.findUsersWithSameEmailOrUsername(id_user, userData.email, userData.username);
 
-    return await UserRepository.updateUser(id_user, userData);
+    return await UserModel.updateUser(id_user, userData);
   }
 
   // Actualizar status usuario
@@ -66,7 +66,7 @@ class UserService {
     const user = await this.getUserById(id_user);
     if (user.status === status) throw new CustomError('Estado usuario sin cambios', 400);
 
-    return UserRepository.updateStatus(id_user, status);
+    return UserModel.updateStatus(id_user, status);
   }
 
   // Actualizar contraseña usuario
@@ -83,12 +83,12 @@ class UserService {
     if (samePassword) throw new CustomError('Contraseñas identicas', 400);
 
     const hashedPassword = await bcrypt.hash(new_password, 10);
-    return await UserRepository.updatePassword(id_user, hashedPassword);
+    return await UserModel.updatePassword(id_user, hashedPassword);
   }
 
   // Obtener usuario por id
   async getUserById(id_user) {
-    const user = await UserRepository.getUserById(id_user);
+    const user = await UserModel.getUserById(id_user);
     if (!user) throw new CustomError('Usuario no encontrado', 404);
 
     return user;
@@ -96,14 +96,14 @@ class UserService {
 
   // Obtener usuario por username
   async getUserByUsername(username) {
-    const user = await UserRepository.getUserByUsername(username);
+    const user = await UserModel.getUserByUsername(username);
     if (!user) throw new CustomError('Usuario no encontrado', 404);
 
     return user;
   }
 
   async findUsersWithSameEmailOrUsername(id_user, email, username) {
-    const users = await UserRepository.findUsersWithSameEmailOrUsername(email, username);
+    const users = await UserModel.findUsersWithSameEmailOrUsername(email, username);
 
     let emailTaken = false;
     let usernameTaken = false;
