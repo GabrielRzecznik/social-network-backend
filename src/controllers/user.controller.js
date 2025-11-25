@@ -31,15 +31,14 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// Obtener usuario
+// Actualizar usuario
 export const updateUser = async (req, res) => {
   const id_user = req.user.id_user;
 
   try {
     const updatedUser = await UserService.updateUser(id_user, req.body);
-    const { password: _, ...userData } = updatedUser;
 
-    res.json({ message: 'Usuario actualizado exitosamente', user: userData });
+    res.json({ message: 'Usuario actualizado exitosamente', user: updatedUser });
   } catch (error) {
     res.status(error.status || 500).json({ message: error.message });
   }

@@ -1,4 +1,4 @@
-import { userDataSchema } from '../validators/user.validator.js';
+import { userDataSchema, userUpdateSchema } from '../validators/user.validator.js';
 import UserModel from '../models/user.model.js';
 import CustomError from '../utils/customError.util.js';
 import { generateAccessToken, verifyRefreshToken } from '../services/auth.service.js';
@@ -29,9 +29,9 @@ class UserService {
     return user;
   }
 
-  // Obtener usuario
+  // Actualizar usuario
   async updateUser(id_user, userData) {
-    const { error } = userDataSchema.validate(userData);
+    const { error } = userUpdateSchema.validate(userData);
     if (error) throw new CustomError(error.details[0].message, 400);
 
     const currentUser = await this.getUserById(id_user);
@@ -40,9 +40,10 @@ class UserService {
       currentUser.birthdate = currentUser.birthdate.toISOString().split('T')[0];
     }
 
-    //Valida password
+    /*Valida password
     const samePassword = await bcrypt.compare(userData.password, currentUser.password);
     if (!samePassword) throw new CustomError('Contraseña incorrecta', 401);
+    */
 
     //Valida cambios
     const filteredUserData = Object.fromEntries(
@@ -55,8 +56,8 @@ class UserService {
 
     if (isSameData) throw new CustomError('Usuario sin cambios', 400);
 
-    // Valida email y username
-    await this.findUsersWithSameEmailOrUsername(id_user, userData.email, userData.username);
+    // Valida username
+    await this.findUsersWithSameEmailOrUsername(id_user, null, userData.username);
 
     return await UserModel.updateUser(id_user, userData);
   }

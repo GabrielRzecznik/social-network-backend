@@ -12,14 +12,14 @@ class UserModel {
     return new User(result.rows[0]);
   }
 
-  async updateUser(id, { name, surname, email, username, birthdate, img }) {
+  async updateUser(id, { name, surname, username, birthdate }) {
     const query = `
       UPDATE "user"
-      SET name = $2, surname = $3, email = $4, username = $5, birthdate = $6, img = $7
+      SET name = $2, surname = $3, username = $4, birthdate = $5
       WHERE id_user = $1
-      RETURNING name, surname, email, username, TO_CHAR(birthdate, 'YYYY-MM-DD') AS birthdate, img;
+      RETURNING name, surname, username, TO_CHAR(birthdate, 'YYYY-MM-DD') AS birthdate;
     `;
-    const result = await pool.query(query, [id, name, surname, email, username, birthdate, img]);
+    const result = await pool.query(query, [id, name, surname, username, birthdate]);
     return result.rows[0] ? new User(result.rows[0]) : null;
   }
 
