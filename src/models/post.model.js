@@ -7,7 +7,7 @@ class PostModel {
     const query = `
       INSERT INTO "post" (id_user, content, img)
       VALUES ($1, $2, $3)
-      RETURNING id_post, id_user, content, img, status;
+      RETURNING id_post, id_user, content, img AS post_img, status;
     `;
     const result = await pool.query(query, [id_user, content, img]);
     return new Post(result.rows[0]);
@@ -26,7 +26,7 @@ class PostModel {
       UPDATE "post"
       SET content = $1, img = $2
       WHERE id_post = $3
-      RETURNING id_post, content, img, status;
+      RETURNING id_post, content, img AS post_img, status;
     `;
     const result = await pool.query(query, [content, img, id_post]);
     return new Post(result.rows[0]);
@@ -38,7 +38,7 @@ class PostModel {
       UPDATE "post"
       SET status = $2
       WHERE id_post = $1
-      RETURNING id_post, content, img, status;
+      RETURNING id_post, content, img AS post_img, status;
     `;
     const result = await pool.query(query, [id_post, status]);
     return new Post(result.rows[0]);
@@ -46,8 +46,10 @@ class PostModel {
 
   async getPostsByUser(id_user) {
     const query = `
-      SELECT * FROM "post"
-      WHERE id_user = $1
+      SELECT p.id_post, p.id_user, p.content, p.img AS post_img, p.status, p.timestamp, u.name, u.surname, u.username, u.img AS user_img
+      FROM post p
+      JOIN "user" u ON p.id_user = u.id_user
+      WHERE p.id_user = $1
     `;
     const result = await pool.query(query, [id_user]);
     return result.rows;
@@ -55,9 +57,10 @@ class PostModel {
 
   async getFeedPosts(id_user) {
     const query = `
-      SELECT p.*
+      SELECT p.id_post, p.id_user, p.content, p.img AS post_img, p.status, p.timestamp, u.name, u.surname, u.username, u.img AS user_img
       FROM post p
       JOIN follow f ON p.id_user = f.following
+      JOIN "user" u ON p.id_user = u.id_user
       WHERE f.follower = $1 AND p.status <> 0;
     `;
     const result = await pool.query(query, [id_user]);
